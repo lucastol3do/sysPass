@@ -285,7 +285,10 @@ final class SessionContext extends ContextBase
      */
     public function generateSecurityKey(string $salt)
     {
-        return $this->setSecurityKey(sha1(time() . $salt));
+        // Use HMAC-SHA256 with a cryptographically secure random nonce
+        // instead of SHA1 with time() which is predictable within the same second
+        $nonce = bin2hex(random_bytes(16));
+        return $this->setSecurityKey(hash_hmac('sha256', $nonce, $salt));
     }
 
     /**

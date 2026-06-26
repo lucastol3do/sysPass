@@ -27,6 +27,7 @@ namespace SP\Core\Crypt;
 use Defuse\Crypto\Exception\CryptoException;
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Defuse\Crypto\Key;
+use SP\Bootstrap;
 use SP\Http\Request;
 
 /**
@@ -67,11 +68,30 @@ final class SecureKeyCookie extends Cookie
     /**
      * Devolver la llave de cifrado para los datos de la cookie
      *
+     * Uses HMAC-SHA256 with the server-side password salt instead of
+     * deriving from User-Agent and client IP which are attacker-controlled
+     * and can be spoofed. The password salt is stored server-side in the
+     * config and cannot be manipulated by the client.
+     *
      * @return string
      */
     public function getCypher()
     {
-        return sha1($this->request->getHeader('User-Agent') . $this->request->getClientAddress());
+        if (empty($this->cypher)) {
+            $this->cypher = hash_hmac('sha256', 'secure_key_cookie', $this->getPasswordSalt());
+        }
+
+        return $this->cypher;
+    }
+
+    /**
+     * Get the password salt from configuration
+     *
+     * @return string
+     */
+    private function getPasswordSalt()
+    {
+        return Bootstrap::getContainer()['configData']->getPasswordSalt();
     }
 
     /**
