@@ -539,7 +539,16 @@ final class XmlExportService extends Service
             $hashNode = $this->xml->createElement('Hash', $hash);
             $hashNode->appendChild($this->xml->createAttribute('sign'));
 
-            $key = $this->exportPass ?: sha1($this->configData->getPasswordSalt());
+            // Require a password for export signing to prevent use of
+            // predictable sha1(passwordSalt) as signing key
+            $key = $this->exportPass;
+            if (empty($key)) {
+                throw new ServiceException(
+                    __u('Export password is required for signing'),
+                    ServiceException::ERROR,
+                    __u('A password must be provided when exporting data to ensure cryptographic integrity')
+                );
+            }
 
             $hashNode->setAttribute('sign', Hash::signMessage($hash, $key));
 

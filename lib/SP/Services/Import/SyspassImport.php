@@ -178,7 +178,19 @@ final class SyspassImport extends XmlImportBase implements ImportInterface
      */
     protected function checkIntegrity()
     {
-        $key = $this->importParams->getImportPwd() ?: sha1($this->configData->getPasswordSalt());
+        $key = $this->importParams->getImportPwd();
+
+        // Legacy fallback: if no import password was provided, try using the
+        // password salt for backwards compatibility with exports created without
+        // a password (pre-security-fix behavior).
+        // NOTE: This is insecure and will be removed in a future version.
+        // All new exports require a password.
+        if (empty($key)) {
+            logger('WARNING: Verifying export integrity without password - using password salt fallback. '
+                . 'This is insecure and will be removed in a future version. '
+                . 'Please re-export with a password.', 'WARN');
+            $key = sha1($this->configData->getPasswordSalt());
+        }
 
         if (!XmlVerifyService::checkXmlHash($this->xmlDOM, $key)) {
             $this->eventDispatcher->notifyEvent('run.import.syspass.process.verify',
