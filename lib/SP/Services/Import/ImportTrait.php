@@ -122,7 +122,15 @@ trait ImportTrait
             if ($this->version >= 210) {
                 $pass = Crypt::decrypt($accountRequest->pass, $accountRequest->key, $this->importParams->getImportMasterPwd());
             } else {
-                $pass = OldCrypt::getDecrypt($accountRequest->pass, $accountRequest->key, $this->importParams->getImportMasterPwd());
+                try {
+                    $pass = OldCrypt::getDecrypt($accountRequest->pass, $accountRequest->key, $this->importParams->getImportMasterPwd());
+                } catch (SPException $e) {
+                    throw new ImportException(
+                        __u('Legacy decryption is not supported. Please use sysPass >= 2.10 for the export.'),
+                        SPException::ERROR,
+                        $e->getMessage()
+                    );
+                }
             }
 
             $accountRequest->pass = $pass;

@@ -33,6 +33,7 @@ use Exception;
 use SP\Core\Crypt\Crypt;
 use SP\Core\Crypt\Hash;
 use SP\Core\Crypt\OldCrypt;
+use SP\Core\Exceptions\SPException;
 use SP\Core\Events\Event;
 use SP\Core\Events\EventMessage;
 use SP\DataModel\CategoryData;
@@ -143,7 +144,7 @@ final class SyspassImport extends XmlImportBase implements ImportInterface
                         base64_decode($node->getAttribute('iv')),
                         $this->importParams->getImportPwd());
                 }
-            } catch (CryptoException $e) {
+            } catch (CryptoException|SPException $e) {
                 processException($e);
 
                 $this->eventDispatcher->notifyEvent('exception', new Event($e));

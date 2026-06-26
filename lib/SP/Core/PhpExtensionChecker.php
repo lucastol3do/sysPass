@@ -53,7 +53,6 @@ final class PhpExtensionChecker
         'openssl' => true,
         'pcre' => true,
         'session' => true,
-        'mcrypt' => false,
         'gd' => false,
         'mbstring' => true,
         'pdo_mysql' => true,
