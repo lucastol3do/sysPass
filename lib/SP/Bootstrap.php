@@ -367,6 +367,10 @@ final class Bootstrap
 
         // Avoid PHP session cookies from JavaScript
         ini_set('session.cookie_httponly', '1');
+        // Prevent session cookies from being sent over insecure connections
+        ini_set('session.cookie_secure', '1');
+        // Mitigate CSRF by restricting cookies to same-site requests
+        ini_set('session.cookie_samesite', 'Strict');
         ini_set('session.save_handler', 'files');
     }
 

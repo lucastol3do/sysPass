@@ -394,13 +394,23 @@ final class Database implements DatabaseInterface
     }
 
     /**
-     * @param $table
+     * @param string $table Table name (validated against whitelist)
      *
      * @return array
+     * @throws QueryException
      */
-    public function getColumnsForTable($table): array
+    public function getColumnsForTable(string $table): array
     {
-        $conn = $this->dbHandler->getConnection()->query("SELECT * FROM $table LIMIT 0");
+        // Sanitize table name: only allow alphanumeric characters and underscores
+        $table = preg_replace('/[^a-zA-Z0-9_]/', '', $table);
+
+        if (empty($table)) {
+            throw new QueryException(__u('Invalid table name'), QueryException::ERROR, __u('Table name cannot be empty'));
+        }
+
+        $conn = $this->dbHandler->getConnection()->query(
+            sprintf('SELECT * FROM `%s` LIMIT 0', $table)
+        );
         $columns = [];
 
         for ($i = 0; $i < $conn->columnCount(); $i++) {

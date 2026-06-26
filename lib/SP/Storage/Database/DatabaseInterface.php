@@ -111,9 +111,9 @@ interface DatabaseInterface
     public function rollbackTransaction();
 
     /**
-     * @param $table
+     * @param string $table
      *
      * @return array
      */
-    public function getColumnsForTable($table): array;
+    public function getColumnsForTable(string $table): array;
 }
