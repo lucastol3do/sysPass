@@ -49,11 +49,20 @@ final class ResourceController extends SimpleControllerBase
         $file = $this->request->analyzeString('f');
         $base = $this->request->analyzeString('b');
 
+        // Sanitize against path traversal: reject any path containing '..'
+        // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
+        $decodedBase = urldecode($base);
+        $decodedFile = urldecode($file);
+
+        if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
+            return;
+        }
+
         if ($file && $base) {
             $this->minify
                 ->setType(Minify::FILETYPE_CSS)
-                ->setBase(urldecode($base), true)
-                ->addFilesFromString(urldecode($file))
+                ->setBase($decodedBase, true)
+                ->addFilesFromString($decodedFile)
                 ->getMinified();
         } else {
             $this->minify->setType(Minify::FILETYPE_CSS)
@@ -79,11 +88,20 @@ final class ResourceController extends SimpleControllerBase
         $file = $this->request->analyzeString('f');
         $base = $this->request->analyzeString('b');
 
+        // Sanitize against path traversal: reject any path containing '..'
+        // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
+        $decodedBase = urldecode($base);
+        $decodedFile = urldecode($file);
+
+        if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
+            return;
+        }
+
         if ($file && $base) {
             $this->minify
                 ->setType(Minify::FILETYPE_JS)
-                ->setBase(urldecode($base), true)
-                ->addFilesFromString(urldecode($file))
+                ->setBase($decodedBase, true)
+                ->addFilesFromString($decodedFile)
                 ->getMinified();
         } else {
             $group = $this->request->analyzeInt('g', 0);

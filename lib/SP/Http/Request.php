@@ -131,6 +131,11 @@ final class Request
             return '';
         }
 
+        // Reject path traversal patterns before resolving
+        if (strpos($path, '..') !== false) {
+            return '';
+        }
+
         $realPath = realpath($base . DIRECTORY_SEPARATOR . $path);
 
         if ($realPath === false
