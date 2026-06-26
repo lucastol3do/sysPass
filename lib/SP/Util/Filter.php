@@ -86,22 +86,32 @@ final class Filter
     }
 
     /**
+     * Sanitize a string value by trimming and encoding HTML special characters.
+     *
+     * This replaces the deprecated FILTER_SANITIZE_STRING (removed in PHP 8.3+)
+     * with htmlspecialchars() which provides proper XSS protection by encoding
+     * <, >, &, ", and ' characters.
+     *
      * @param $value
      *
      * @return string
      */
     public static function getString($value): string
     {
-        return filter_var(trim($value), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+        return htmlspecialchars(trim($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**
+     * Return a raw/unfiltered string value (only trimmed).
+     *
+     * Use with caution - the caller is responsible for proper output encoding.
+     *
      * @param $value
      *
      * @return string
      */
     public static function getRaw($value): string
     {
-        return filter_var(trim($value), FILTER_UNSAFE_RAW);
+        return trim($value);
     }
 }
