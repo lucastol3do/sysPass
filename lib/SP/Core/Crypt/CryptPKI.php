@@ -38,7 +38,7 @@ use SP\Storage\File\FileHandler;
  */
 final class CryptPKI
 {
-    const KEY_SIZE = 1024;
+    const KEY_SIZE = 2048;
     const PUBLIC_KEY_FILE = CONFIG_PATH . DIRECTORY_SEPARATOR . 'pubkey.pem';
     const PRIVATE_KEY_FILE = CONFIG_PATH . DIRECTORY_SEPARATOR . 'key.pem';
 
@@ -108,7 +108,8 @@ final class CryptPKI
      */
     public static function getMaxDataSize()
     {
-        return (self::KEY_SIZE / 8) - 11;
+        // OAEP with SHA-1: overhead = 2 * hash_len + 2 = 42 bytes
+        return (self::KEY_SIZE / 8) - 42;
     }
 
     /**
@@ -121,7 +122,7 @@ final class CryptPKI
      */
     public function encryptRSA($data)
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
+        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
         $this->rsa->loadKey($this->getPublicKey(), RSA::PUBLIC_FORMAT_PKCS1);
 
         return $this->rsa->encrypt($data);
@@ -150,7 +151,7 @@ final class CryptPKI
      */
     public function decryptRSA($data)
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
+        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
         $this->rsa->loadKey($this->getPrivateKey(), RSA::PRIVATE_FORMAT_PKCS1);
 
         return @$this->rsa->decrypt($data);
@@ -175,7 +176,7 @@ final class CryptPKI
      */
     public function getKeySize()
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_PKCS1);
+        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
         $this->rsa->loadKey($this->getPrivateKey(), RSA::PRIVATE_FORMAT_PKCS1);
 
         return $this->rsa->getSize();

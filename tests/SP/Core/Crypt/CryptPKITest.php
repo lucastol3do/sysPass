@@ -50,7 +50,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSA()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 11;
+        $length = (CryptPKI::KEY_SIZE / 8) - 42;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
@@ -68,7 +68,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSAPassword()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 11;
+        $length = (CryptPKI::KEY_SIZE / 8) - 42;
 
         $random = PasswordUtil::randomPassword($length);
 
@@ -85,7 +85,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSAWrongLength()
     {
-        $length = ((CryptPKI::KEY_SIZE / 8) - 11) + 1;
+        $length = ((CryptPKI::KEY_SIZE / 8) - 42) + 1;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
@@ -124,7 +124,7 @@ class CryptPKITest extends TestCase
      */
     public function testEncryptRSA()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 11;
+        $length = (CryptPKI::KEY_SIZE / 8) - 42;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
