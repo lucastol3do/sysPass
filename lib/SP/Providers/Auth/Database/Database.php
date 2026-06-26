@@ -123,15 +123,32 @@ final class Database implements AuthInterface
     }
 
     /**
+     * Verify migrated user credentials using secure hash algorithms only.
+     *
+     * MD5 and SHA1 hashes are no longer accepted due to cryptographic weakness.
+     * Only bcrypt-based hashes (via password_verify or crypt with $2y$ prefix)
+     * are allowed for migration. Users with MD5/SHA1 hashes must reset their passwords.
+     *
      * @param UserLoginResponse $userLoginResponse
      *
      * @return bool
      */
     protected function checkMigrateUser(UserLoginResponse $userLoginResponse)
     {
-        return ($userLoginResponse->getPass() === sha1($userLoginResponse->getHashSalt() . $this->userLoginData->getLoginPass())
-            || $userLoginResponse->getPass() === md5($this->userLoginData->getLoginPass())
-            || hash_equals($userLoginResponse->getPass(), crypt($this->userLoginData->getLoginPass(), $userLoginResponse->getHashSalt()))
-            || Hash::checkHashKey($this->userLoginData->getLoginPass(), $userLoginResponse->getPass()));
+        // Only accept bcrypt-based password verification for migration.
+        // MD5 and SHA1 have been removed as they are cryptographically broken.
+        $storedPass = $userLoginResponse->getPass();
+        $inputPass = $this->userLoginData->getLoginPass();
+
+        // Check if the stored hash is a bcrypt hash ($2y$ or $2a$ prefix)
+        // and verify using crypt() with hash_equals() for timing-safe comparison
+        if (preg_match('/^\$2[ay]\$/', $storedPass)
+            && hash_equals($storedPass, crypt($inputPass, $storedPass))
+        ) {
+            return true;
+        }
+
+        // Use the standard bcrypt verification as fallback
+        return Hash::checkHashKey($inputPass, $storedPass);
     }
 }
