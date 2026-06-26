@@ -212,7 +212,11 @@ final class AccountFileController extends ControllerBase implements CrudControll
                 $fileData->setAccountId($accountId);
                 $fileData->setName(Html::sanitize($file['name']));
                 $fileData->setSize($file['size']);
-                $fileData->setType($file['type']);
+                // Use server-detected MIME type instead of client-supplied type
+                // which can be spoofed by an attacker
+                $finfo = new finfo(FILEINFO_MIME_TYPE);
+                $serverMimeType = $finfo->file($file['tmp_name']);
+                $fileData->setType($serverMimeType ?: $file['type']);
                 $fileData->setExtension(mb_strtoupper(pathinfo($fileData->getName(), PATHINFO_EXTENSION)));
 
                 if ($fileData->getName() === '') {
