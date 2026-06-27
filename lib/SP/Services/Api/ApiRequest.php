@@ -83,7 +83,17 @@ final class ApiRequest
             );
         }
 
-        if (!isset($data['jsonrpc'], $data['method'], $data['params'], $data['id'], $data['params']['authToken'])) {
+        // Try to get the auth token from the Authorization header first (more secure),
+        // then fall back to the JSON-RPC params for backward compatibility.
+        // Passing tokens in headers prevents them from appearing in server/proxy logs.
+        $authToken = $this->getAuthTokenFromHeader();
+        if ($authToken !== null) {
+            $data['params']['authToken'] = $authToken;
+        }
+
+        if (!isset($data['jsonrpc'], $data['method'], $data['id'])
+            || (!isset($data['params']['authToken']) && $authToken === null)
+        ) {
             throw new ApiRequestException(
                 __u('Invalid format'),
                 ApiRequestException::ERROR,
@@ -98,6 +108,41 @@ final class ApiRequest
         $this->data->replace($data['params']);
 
         return $this;
+    }
+
+    /**
+     * Extract auth token from Authorization header
+     *
+     * Supports both "Bearer <token>" and raw token formats.
+     * This is preferred over passing the token in the JSON body
+     * because headers are less likely to be logged by proxies/servers.
+     *
+     * @return string|null
+     */
+    private function getAuthTokenFromHeader()
+    {
+        $authHeader = isset($_SERVER['HTTP_AUTHORIZATION'])
+            ? trim($_SERVER['HTTP_AUTHORIZATION'])
+            : null;
+
+        if (empty($authHeader)) {
+            // Also check for redirect/auth headers from Apache/nginx
+            $authHeader = isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])
+                ? trim($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])
+                : null;
+        }
+
+        if (empty($authHeader)) {
+            return null;
+        }
+
+        // Strip "Bearer " prefix if present
+        if (preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
+            return $matches[1];
+        }
+
+        // Return raw header value as token
+        return $authHeader;
     }
 
     /**
