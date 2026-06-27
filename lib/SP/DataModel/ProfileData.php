@@ -31,6 +31,7 @@ defined('APP_ROOT') || die();
  *
  * @package SP\DataModel
  */
+#[\AllowDynamicProperties]
 class ProfileData
 {
     /**
@@ -603,7 +604,7 @@ class ProfileData
      * @return void
      * @link http://php.net/manual/en/language.oop5.magic.php#language.oop5.magic.sleep
      */
-    public function __wakeup()
+    public function __wakeup(): void
     {
         // Para realizar la conversión de nombre de propiedades que empiezan por _
         foreach (get_object_vars($this) as $name => $value) {

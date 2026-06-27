@@ -35,6 +35,7 @@ use Traversable;
  *
  * @package SP\Core\Context
  */
+#[\AllowDynamicProperties]
 abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countable
 {
     /**
@@ -52,7 +53,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      * <b>Traversable</b>
      * @since 5.0.0
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->attributes);
     }
@@ -72,7 +73,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      *                      The return value will be casted to boolean if non-boolean was returned.
      * @since 5.0.0
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return $this->exists($offset);
     }
@@ -102,7 +103,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      * @return mixed Can return all value types.
      * @since 5.0.0
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->get($offset);
     }
@@ -141,7 +142,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      * @return void
      * @since 5.0.0
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->set($offset, $value);
     }
@@ -173,7 +174,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      * @return void
      * @since 5.0.0
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         $this->remove($offset);
     }
@@ -200,7 +201,7 @@ abstract class DataCollection implements IteratorAggregate, ArrayAccess, Countab
      * The return value is cast to an integer.
      * @since 5.1.0
      */
-    public function count()
+    public function count(): int
     {
         return count($this->attributes);
     }

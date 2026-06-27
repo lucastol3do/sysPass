@@ -33,6 +33,7 @@ use SP\Util\Util;
  *
  * @package SP\DataModel
  */
+#[\AllowDynamicProperties]
 trait SerializedModel
 {
     /**

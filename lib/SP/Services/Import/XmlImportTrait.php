@@ -31,10 +31,11 @@ use SP\Core\Exceptions\SPException;
 defined('APP_ROOT') || die();
 
 /**
- * Trait XmlImportTrait para manejar archivos de importación en formato XML
+ * Trait XmlImportTrait
  *
- * @package SP
+ * @package SP\Services\Import
  */
+#[\AllowDynamicProperties]
 trait XmlImportTrait
 {
     /**
@@ -84,7 +85,7 @@ trait XmlImportTrait
         foreach ($ParentNode as $nodes) {
             /** @var DOMElement $Account */
             foreach ($nodes->getElementsByTagName($childNodeName) as $node) {
-                $this->$callback($node);
+                $this->{$callback}($node);
             }
         }
     }

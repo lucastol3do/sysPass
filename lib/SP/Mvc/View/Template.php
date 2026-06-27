@@ -40,6 +40,7 @@ use SP\Http\Uri;
  * publicada en http://www.sitepoint.com/flexible-view-manipulation-1/
  *
  */
+#[\AllowDynamicProperties]
 final class Template
 {
     const TEMPLATE_EXTENSION = '.inc';
