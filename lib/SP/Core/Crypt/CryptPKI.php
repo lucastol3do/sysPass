@@ -26,7 +26,8 @@ namespace SP\Core\Crypt;
 
 defined('APP_ROOT') || die();
 
-use phpseclib\Crypt\RSA;
+use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Crypt\RSA;
 use SP\Core\Exceptions\SPException;
 use SP\Storage\File\FileException;
 use SP\Storage\File\FileHandler;
@@ -43,10 +44,6 @@ final class CryptPKI
     const PRIVATE_KEY_FILE = CONFIG_PATH . DIRECTORY_SEPARATOR . 'key.pem';
 
     /**
-     * @var RSA
-     */
-    protected $rsa;
-    /**
      * @var FileHandler
      */
     private $publicKeyFile;
@@ -56,14 +53,10 @@ final class CryptPKI
     private $privateKeyFile;
 
     /**
-     * @param RSA $rsa
-     *
      * @throws SPException
      */
-    public function __construct(RSA $rsa)
+    public function __construct()
     {
-        $this->rsa = $rsa;
-
         $this->setUp();
     }
 
@@ -95,10 +88,11 @@ final class CryptPKI
      */
     public function createKeys()
     {
-        $keys = $this->rsa->createKey(self::KEY_SIZE);
+        $private = RSA::createKey(self::KEY_SIZE);
+        $public = $private->getPublicKey();
 
-        $this->publicKeyFile->save($keys['publickey']);
-        $this->privateKeyFile->save($keys['privatekey']);
+        $this->publicKeyFile->save($public->toString('PKCS1'));
+        $this->privateKeyFile->save($private->toString('PKCS1'));
 
         chmod(CryptPKI::PRIVATE_KEY_FILE, 0600);
     }
@@ -108,8 +102,8 @@ final class CryptPKI
      */
     public static function getMaxDataSize()
     {
-        // OAEP with SHA-1: overhead = 2 * hash_len + 2 = 42 bytes
-        return (self::KEY_SIZE / 8) - 42;
+        // OAEP with SHA-256 (phpseclib3 default): overhead = 2 * hash_len + 2 = 2 * 32 + 2 = 66 bytes
+        return (self::KEY_SIZE / 8) - 66;
     }
 
     /**
@@ -122,10 +116,10 @@ final class CryptPKI
      */
     public function encryptRSA($data)
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
-        $this->rsa->loadKey($this->getPublicKey(), RSA::PUBLIC_FORMAT_PKCS1);
+        $publicKey = PublicKeyLoader::load($this->getPublicKey())
+            ->withPadding(RSA::ENCRYPTION_OAEP);
 
-        return $this->rsa->encrypt($data);
+        return $publicKey->encrypt($data);
     }
 
     /**
@@ -151,10 +145,10 @@ final class CryptPKI
      */
     public function decryptRSA($data)
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
-        $this->rsa->loadKey($this->getPrivateKey(), RSA::PRIVATE_FORMAT_PKCS1);
+        $privateKey = PublicKeyLoader::load($this->getPrivateKey())
+            ->withPadding(RSA::ENCRYPTION_OAEP);
 
-        return @$this->rsa->decrypt($data);
+        return @$privateKey->decrypt($data);
     }
 
     /**
@@ -176,9 +170,8 @@ final class CryptPKI
      */
     public function getKeySize()
     {
-        $this->rsa->setEncryptionMode(RSA::ENCRYPTION_OAEP);
-        $this->rsa->loadKey($this->getPrivateKey(), RSA::PRIVATE_FORMAT_PKCS1);
+        $privateKey = PublicKeyLoader::load($this->getPrivateKey());
 
-        return $this->rsa->getSize();
+        return $privateKey->getLength();
     }
 }

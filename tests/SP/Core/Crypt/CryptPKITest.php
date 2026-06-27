@@ -25,7 +25,6 @@
 namespace SP\Tests\SP\Core\Crypt;
 
 use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
-use phpseclib\Crypt\RSA;
 use PHPUnit\Framework\TestCase;
 use SP\Core\Crypt\CryptPKI;
 use SP\Core\Exceptions\SPException;
@@ -50,7 +49,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSA()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 42;
+        $length = (CryptPKI::KEY_SIZE / 8) - 66;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
@@ -68,7 +67,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSAPassword()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 42;
+        $length = (CryptPKI::KEY_SIZE / 8) - 66;
 
         $random = PasswordUtil::randomPassword($length);
 
@@ -85,7 +84,7 @@ class CryptPKITest extends TestCase
      */
     public function testDecryptRSAWrongLength()
     {
-        $length = ((CryptPKI::KEY_SIZE / 8) - 42) + 1;
+        $length = ((CryptPKI::KEY_SIZE / 8) - 66) + 1;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
@@ -124,7 +123,7 @@ class CryptPKITest extends TestCase
      */
     public function testEncryptRSA()
     {
-        $length = (CryptPKI::KEY_SIZE / 8) - 42;
+        $length = (CryptPKI::KEY_SIZE / 8) - 66;
 
         $random = PasswordUtil::generateRandomBytes($length);
 
@@ -171,7 +170,7 @@ class CryptPKITest extends TestCase
      */
     protected function setUp()
     {
-        $this->cryptPki = new CryptPKI(new RSA());
+        $this->cryptPki = new CryptPKI();
     }
 
     /**
