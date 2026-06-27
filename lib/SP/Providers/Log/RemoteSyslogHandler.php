@@ -28,6 +28,7 @@ use DI\Container;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Monolog\Handler\SyslogUdpHandler;
+use Monolog\Level;
 use Monolog\Logger;
 use SP\Core\Events\Event;
 use SP\Core\Exceptions\InvalidClassException;
@@ -95,7 +96,7 @@ final class RemoteSyslogHandler extends LoggerBase
                 $configData->getSyslogServer(),
                 $configData->getSyslogPort(),
                 LOG_USER,
-                Logger::DEBUG,
+                Level::Debug,
                 true,
                 'syspass'
             )
