@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * sysPass
  *
@@ -237,7 +239,7 @@ final class Database implements DatabaseInterface
                 $stmt = $connection->query($query);
             }
 
-            $this->lastId = $connection->lastInsertId();
+            $this->lastId = (int)$connection->lastInsertId();
 
             return $stmt;
         } catch (Exception $e) {
