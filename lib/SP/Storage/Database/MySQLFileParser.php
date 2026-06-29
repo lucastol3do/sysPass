@@ -92,7 +92,7 @@ final class MySQLFileParser implements DatabaseFileInterface
                     if (!$end) {
                         $query .= $buffer . PHP_EOL;
                     } elseif ($end && strpos($buffer, 'DELIMITER') === false) {
-                        $queries[] = $query . trim(substr_replace($buffer, '', $length - $delimiterLength), $delimiterLength);
+                        $queries[] = $query . trim(substr_replace($buffer, '', $length - $delimiterLength), $delimiter);
 
                         $query = '';
                     }
