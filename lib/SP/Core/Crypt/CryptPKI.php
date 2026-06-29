@@ -147,8 +147,10 @@ final class CryptPKI
      */
     public function decryptRSA($data)
     {
+        // JSEncrypt (client-side) uses PKCS1v1.5 padding by default.
+        // Must match the client-side padding for decryption to succeed.
         $privateKey = PublicKeyLoader::load($this->getPrivateKey())
-            ->withPadding(RSA::ENCRYPTION_OAEP);
+            ->withPadding(RSA::ENCRYPTION_PKCS1);
 
         return @$privateKey->decrypt($data);
     }

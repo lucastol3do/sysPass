@@ -1,0 +1,15 @@
+{
+  "name": "syspass-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "sysPass E2E installation tests",
+  "scripts": {
+    "test": "playwright test",
+    "test:install": "playwright test e2e/install.spec.js",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
