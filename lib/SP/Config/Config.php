@@ -117,19 +117,22 @@ final class Config
                         $this->configData = $this->loadConfigFromFile();
                         $this->fileCache->save($this->configData);
                     } else {
-                        // Empty or missing config — treat as fresh install.
-                        // Do NOT call saveConfig() here because it requires a
-                        // session context that does not exist during initial setup.
-                        // The installer will create config.xml after setup.
-                        $this->configData = new ConfigData();
-                        $this->configData->setPasswordSalt(PasswordUtil::generateRandomBytes(30));
+                    // Empty or missing config — treat as fresh install.
+                    // Do NOT call saveConfig() here because it requires a
+                    // session context that does not exist during initial setup.
+                    // The installer will create config.xml after setup.
+                    $this->configData = new ConfigData();
+                    // Use a deterministic salt during install so that resource
+                    // URI signatures (HMAC) remain valid across requests.
+                    // This salt will be replaced when the installer saves config.xml.
+                    $this->configData->setPasswordSalt(hash('sha256', 'syspass-install-salt', true));
 
-                        // Remove empty config.xml if it exists
-                        if (file_exists($configFile)) {
-                            @unlink($configFile);
-                        }
+                    // Remove empty config.xml if it exists
+                    if (file_exists($configFile)) {
+                        @unlink($configFile);
+                    }
 
-                        logger('Config file not found or empty — fresh install mode', 'INFO');
+                    logger('Config file not found or empty — fresh install mode', 'INFO');
                     }
 
                     logger('Config loaded');
