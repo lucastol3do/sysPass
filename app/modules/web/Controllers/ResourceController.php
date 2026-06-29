@@ -51,16 +51,16 @@ final class ResourceController extends SimpleControllerBase
         $file = $this->request->analyzeString('f');
         $base = $this->request->analyzeString('b');
 
-        // Sanitize against path traversal: reject any path containing '..'
-        // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
-        $decodedBase = urldecode($base);
-        $decodedFile = urldecode($file);
-
-        if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
-            return;
-        }
-
         if ($file && $base) {
+            // Sanitize against path traversal: reject any path containing '..'
+            // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
+            $decodedBase = urldecode($base);
+            $decodedFile = urldecode($file);
+
+            if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
+                return;
+            }
+
             $this->minify
                 ->setType(Minify::FILETYPE_CSS)
                 ->setBase($decodedBase, true)
@@ -90,16 +90,16 @@ final class ResourceController extends SimpleControllerBase
         $file = $this->request->analyzeString('f');
         $base = $this->request->analyzeString('b');
 
-        // Sanitize against path traversal: reject any path containing '..'
-        // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
-        $decodedBase = urldecode($base);
-        $decodedFile = urldecode($file);
-
-        if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
-            return;
-        }
-
         if ($file && $base) {
+            // Sanitize against path traversal: reject any path containing '..'
+            // after URL decoding, since urldecode can decode %2e%2e%2f into '../'
+            $decodedBase = urldecode($base);
+            $decodedFile = urldecode($file);
+
+            if (strpos($decodedBase, '..') !== false || strpos($decodedFile, '..') !== false) {
+                return;
+            }
+
             $this->minify
                 ->setType(Minify::FILETYPE_JS)
                 ->setBase($decodedBase, true)

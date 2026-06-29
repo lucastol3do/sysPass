@@ -109,7 +109,7 @@ use SP\Mvc\View\Template;
                 <input id="dbname" name="dbname" type="text" required
                        class="mdl-textfield__input mdl-color-text--indigo-400"
                        value="syspass" autocomplete="off" autofocus
-                       pattern="[0-9a-zA-Z$_-]+">
+                       pattern="[0-9a-zA-Z$_\-]+">
                 <label class="mdl-textfield__label"
                        for="dbuser"><?php echo __('sysPass database name'); ?></label>
             </div>
@@ -126,7 +126,7 @@ use SP\Mvc\View\Template;
                 <input id="dbhost" name="dbhost" type="text" required
                        class="mdl-textfield__input mdl-color-text--indigo-400"
                        value="localhost" autocomplete="off" autofocus
-                       pattern="([0-9a-zA-Z._-]+|([0-9]{1,3}.)+)(:[0-9]{1,5})?|unix:.*">
+                       pattern="([0-9a-zA-Z._\-]+|([0-9]{1,3}\.)+)(:[0-9]{1,5})?|unix:.*">
                 <label class="mdl-textfield__label"
                        for="dbhost"><?php echo __('sysPass database server'); ?></label>
             </div>
