@@ -1,0 +1,1204 @@
+/**
+ * sysPass Material Dark Theme
+ * GitHub-style dark palette for sysPass password manager
+ * Issue #1727
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+  /* Backgrounds */
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --bg-overlay: rgba(13, 17, 23, 0.85);
+
+  /* Text */
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --text-inverse: #0d1117;
+
+  /* Accent */
+  --accent: #58a6ff;
+  --accent-hover: #1f6feb;
+  --accent-fg: #ffffff;
+
+  /* Borders */
+  --border-default: #30363d;
+  --border-muted: #21262d;
+  --border-subtle: rgba(48, 54, 61, 0.5);
+
+  /* Semantic */
+  --success: #3fb950;
+  --success-bg: rgba(63, 185, 80, 0.15);
+  --warning: #d29922;
+  --warning-bg: rgba(210, 153, 34, 0.15);
+  --error: #f85149;
+  --error-bg: rgba(248, 81, 73, 0.15);
+  --info: #58a6ff;
+  --info-bg: rgba(88, 166, 255, 0.15);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   BASE / RESET
+   ============================================ */
+html,
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+* {
+  color-scheme: dark;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+#wrap {
+  background-color: var(--bg-primary) !important;
+}
+
+#container,
+#content {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+#content.public-link {
+  background-color: var(--bg-primary) !important;
+}
+
+/* ============================================
+   HEADER / NAVBAR
+   ============================================ */
+.mdl-layout__header,
+.mdl-layout__header-row {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+/* Override MDL indigo header color used in templates */
+.mdl-color--indigo-400,
+.mdl-layout__header.mdl-color--indigo-400 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.mdl-layout__header-row .mdl-navigation__link {
+  color: var(--text-primary) !important;
+}
+
+.mdl-layout__header-row .mdl-navigation__link:hover {
+  color: var(--accent) !important;
+}
+
+/* ============================================
+   DRAWER / SIDEBAR
+   ============================================ */
+.mdl-layout__drawer {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-right: 1px solid var(--border-default) !important;
+}
+
+.mdl-layout__drawer .mdl-layout-title {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-secondary) !important;
+}
+
+.mdl-layout__drawer .mdl-navigation__link {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-layout__drawer .mdl-navigation__link:hover {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--accent) !important;
+}
+
+.mdl-menu__item--full-bleed-divider {
+  border-top: 1px solid var(--border-default) !important;
+}
+
+/* ============================================
+   TABS
+   ============================================ */
+.mdl-tabs__tab-bar {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+.mdl-tabs__tab {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-tabs__tab.is-active {
+  color: var(--accent) !important;
+}
+
+.mdl-tabs.is-upgraded .mdl-tabs__tab.is-active::after {
+  background: var(--accent) !important;
+}
+
+.mdl-tabs__panel {
+  background-color: var(--bg-primary) !important;
+}
+
+/* ============================================
+   CARDS / PANELS / BOXES
+   ============================================ */
+#content .data,
+.popup-data,
+#box-popup,
+#box-popup > table,
+.help-box,
+.help-container {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+#content .data {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+#box-popup {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+#box-popup > h2 {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+/* ============================================
+   TABLES
+   ============================================ */
+table {
+  color: var(--text-primary) !important;
+}
+
+#content .data-table thead th,
+#content h2,
+#content #title,
+#content #title.titleNormal {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+#content .data-table tbody td.cell-data,
+#content .data-table tbody td.cell-nodata,
+#content .data-table tbody td.cell-actions {
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+#content .row_even > td {
+  background-color: var(--bg-primary) !important;
+}
+
+#content .row_odd > td {
+  background-color: var(--bg-secondary) !important;
+}
+
+#content td.descField {
+  color: var(--text-secondary) !important;
+  border-right-color: var(--border-default) !important;
+}
+
+#content td.valField .lowres-title {
+  color: var(--text-secondary) !important;
+}
+
+/* table hover */
+table tr.even:hover,
+table tr.odd:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   FORMS / INPUTS
+   ============================================ */
+.mdl-textfield__input {
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+.mdl-textfield__label {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-textfield.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-textfield--floating-label.is-dirty .mdl-textfield__label {
+  color: var(--accent) !important;
+}
+
+.mdl-textfield__label::after {
+  background-color: var(--accent) !important;
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__input {
+  border-color: var(--error) !important;
+}
+
+.mdl-textfield.is-invalid .mdl-textfield__label::after {
+  background-color: var(--error) !important;
+}
+
+.mdl-textfield__error {
+  color: var(--error) !important;
+}
+
+/* Override MDL text color classes on inputs */
+.mdl-textfield__input.mdl-color-text--indigo-400 {
+  color: var(--text-primary) !important;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.mdl-button {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-tertiary) !important;
+}
+
+.mdl-button--raised {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.mdl-button--colored,
+.mdl-button--accent {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.mdl-button--colored:hover,
+.mdl-button--accent:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+.mdl-button--fab.mdl-button--colored {
+  background-color: var(--accent) !important;
+}
+
+.mdl-button--icon {
+  background-color: transparent !important;
+  color: var(--text-secondary) !important;
+}
+
+.mdl-button--icon:hover {
+  color: var(--text-primary) !important;
+}
+
+/* Override MDL color classes on buttons */
+.mdl-color--indigo-400.mdl-button--colored,
+.mdl-color--indigo-400.mdl-button--fab {
+  background-color: var(--accent) !important;
+}
+
+/* ============================================
+   SEARCH / DATAGRID
+   ============================================ */
+#content #searchbox {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+#content .pager {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-top: 1px solid var(--border-default) !important;
+}
+
+#content .pager a {
+  color: var(--accent) !important;
+}
+
+/* Account labels in search results */
+#content #data-search .account-label {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+#content #data-search .account-label .field-name {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+#content #data-search .account-actions {
+  border-top-color: var(--border-default) !important;
+}
+
+#content #data-search .account-info {
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   CHIPS / TAGS
+   ============================================ */
+.mdl-chip {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+.mdl-chip__text {
+  color: var(--text-primary) !important;
+}
+
+.mdl-chip__contact {
+  color: var(--text-primary) !important;
+}
+
+div.tag-list-box span.tag,
+div.tags-box span.tag,
+#content #data-search .tags-box span.tag {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   MENUS / DROPDOWNS
+   ============================================ */
+.mdl-menu__container .mdl-menu__outline,
+.mdl-menu__container .mdl-menu {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.mdl-menu__item {
+  color: var(--text-primary) !important;
+}
+
+.mdl-menu__item:hover {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.mdl-menu__item--full-bleed-divider {
+  border-top-color: var(--border-default) !important;
+}
+
+/* ============================================
+   TOOLTIPS
+   ============================================ */
+.mdl-tooltip {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+.tooltip {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+.tooltip-text .tooltip-header {
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* ============================================
+   DIALOGS / MODALS
+   ============================================ */
+.dialog-container,
+.loading-container {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.dialog-container > div {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
+.dialog-container header {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-default) !important;
+}
+
+.dialog-button-bar {
+  border-top: 1px solid var(--border-default) !important;
+}
+
+/* ============================================
+   ALERTS / NOTIFICATIONS / MESSAGES
+   ============================================ */
+#actions ul.errors > li.msg-critical,
+fieldset.warning,
+.msg-critical {
+  color: var(--error) !important;
+  background-color: var(--error-bg) !important;
+  border-color: var(--error) !important;
+}
+
+#actions ul.errors > li.msg-warning,
+.msg-warning {
+  color: var(--warning) !important;
+  background-color: var(--warning-bg) !important;
+  border-color: var(--warning) !important;
+}
+
+#actions ul.errors > li.msg-ok,
+.msg-ok {
+  color: var(--success) !important;
+  background-color: var(--success-bg) !important;
+  border-color: var(--success) !important;
+}
+
+#actions ul.errors > li > p.hint {
+  color: var(--text-secondary) !important;
+}
+
+#nojs {
+  background-color: var(--error) !important;
+  color: #ffffff !important;
+}
+
+/* Filter badges */
+.filter-on {
+  color: var(--success) !important;
+  background-color: var(--success-bg) !important;
+  border-color: var(--success) !important;
+}
+
+.global-on {
+  color: var(--warning) !important;
+  background-color: var(--warning-bg) !important;
+  border-color: var(--warning) !important;
+}
+
+/* No results */
+.noRes {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--border-default) !important;
+}
+
+/* ============================================
+   LOGIN PAGE
+   ============================================ */
+body.login,
+body.logout,
+body.userpassreset {
+  background-color: var(--bg-primary) !important;
+}
+
+body.login footer,
+body.logout footer,
+body.userpassreset footer {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+}
+
+body.login footer a,
+body.logout footer a,
+body.userpassreset footer a {
+  color: var(--text-secondary) !important;
+}
+
+#box-pub-noheader {
+  background-color: transparent !important;
+}
+
+#box-pub-noheader .box-form {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+#box-pub-noheader .box-form form fieldset#box-data legend {
+  color: var(--text-primary) !important;
+}
+
+#box-pub-noheader #box-login #box-actions a {
+  color: var(--text-secondary) !important;
+}
+
+#box-pub-noheader #box-updated {
+  color: var(--success) !important;
+  background-color: var(--success-bg) !important;
+  border-color: var(--success) !important;
+}
+
+#box-pub-noheader #demo-info {
+  color: var(--text-secondary) !important;
+  border-top-color: var(--border-default) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* ============================================
+   CONFIG / FORMS
+   ============================================ */
+#content fieldset.data > legend {
+  color: var(--accent) !important;
+}
+
+#content .tblConfig td.rowHeader {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-top-color: var(--bg-primary) !important;
+  border-bottom-color: var(--accent) !important;
+}
+
+#content .tblConfig td.descField {
+  color: var(--text-secondary) !important;
+}
+
+#content .section {
+  color: var(--accent) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+#content #tabs fieldset {
+  border-color: var(--border-default) !important;
+}
+
+/* ============================================
+   CODE / PRE BLOCKS
+   ============================================ */
+pre,
+code,
+samp,
+kbd {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  box-shadow: inset 0 0 0.3em var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+  border-top: 1px solid var(--border-default) !important;
+  box-shadow: 0 -3px 2px -2px rgba(0, 0, 0, 0.4) !important;
+}
+
+footer a,
+footer a:visited {
+  color: var(--text-secondary) !important;
+}
+
+footer a:hover {
+  color: var(--accent) !important;
+}
+
+footer #notices .notices-title {
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* ============================================
+   LOADING / SPINNER
+   ============================================ */
+#wrap-loading {
+  background-color: rgba(13, 17, 23, 0.8) !important;
+}
+
+#wrap-loading #taskStatus {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   LISTS / DATA ROWS
+   ============================================ */
+#content .data-rows ul {
+  background-color: var(--bg-secondary) !important;
+}
+
+#content .data-rows li {
+  color: var(--text-primary) !important;
+}
+
+#content .data .list-wrap li,
+#box-popup .list-wrap li {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+#content .data .list-wrap li:hover,
+#box-popup .list-wrap li:hover {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================
+   PASSWORD LEVELS
+   ============================================ */
+.password-level.strongest {
+  color: var(--success) !important;
+}
+
+.password-level.strong {
+  color: var(--accent) !important;
+}
+
+.password-level.good {
+  color: var(--warning) !important;
+}
+
+.password-level.weak {
+  color: var(--error) !important;
+}
+
+/* ============================================
+   DIALOG TEXT
+   ============================================ */
+.dialog-text,
+.dialog-pass-text {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-secondary) !important;
+}
+
+.dialog-user-text {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+.dialog-buttons {
+  border-top-color: var(--border-default) !important;
+}
+
+.dialog-clip-copy {
+  color: var(--success) !important;
+  background-color: var(--success-bg) !important;
+}
+
+/* ============================================
+   NOTIFICATIONS / EVENT LOG
+   ============================================ */
+#content #resEventLog td {
+  border-bottom-color: var(--border-default) !important;
+}
+
+#content td.valField .notification-description .event-description {
+  color: var(--accent) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* ============================================
+   SELECTIZE CUSTOM
+   ============================================ */
+.selectize-control .selectize-input,
+.selectize-control.single .selectize-input.input-active,
+.selectize-dropdown {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+.selectize-control.multi .selectize-input > div {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.selectize-control.multi .selectize-input > div.active {
+  background-color: var(--accent-hover) !important;
+}
+
+.selectize-dropdown .active {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.selectize-dropdown [data-selectable] .highlight {
+  background-color: var(--accent) !important;
+}
+
+.selectize-input > input {
+  color: var(--text-primary) !important;
+}
+
+.selectize-control.single .selectize-input::after {
+  border-top-color: var(--text-secondary) !important;
+}
+
+.selectize-control.single .selectize-input.dropdown-active::after {
+  border-bottom-color: var(--text-secondary) !important;
+}
+
+.selectize-dropdown .optgroup-header {
+  color: var(--text-secondary) !important;
+  background-color: var(--bg-secondary) !important;
+}
+
+.selectize-dropdown .optgroup::before {
+  background-color: var(--border-default) !important;
+}
+
+/* ============================================
+   TOASTR
+   ============================================ */
+#toast-container > div {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+.toast-success {
+  background-color: var(--success) !important;
+  color: #ffffff !important;
+}
+
+.toast-error {
+  background-color: var(--error) !important;
+  color: #ffffff !important;
+}
+
+.toast-info {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.toast-warning {
+  background-color: var(--warning) !important;
+  color: #0d1117 !important;
+}
+
+/* ============================================
+   DATETIME PICKER
+   ============================================ */
+.dtp > .dtp-content {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.dtp > .dtp-content > .dtp-date-view > header.dtp-header,
+.dtp div.dtp-date,
+.dtp div.dtp-time {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+.dtp table.dtp-picker-days tr > td > a,
+.dtp .dtp-picker-time > a,
+.dtp .dtp-actual-year {
+  color: var(--text-primary) !important;
+}
+
+.dtp table.dtp-picker-days tr > td > a.selected,
+.dtp .dtp-actual-meridien a.selected {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+.dtp table.dtp-picker-days tr > th {
+  color: var(--text-secondary) !important;
+}
+
+.dtp table.dtp-picker-days tr > td > span.dtp-select-day {
+  color: var(--text-muted) !important;
+}
+
+.dtp .dtp-close > a {
+  color: var(--text-primary) !important;
+}
+
+.dtp a.dtp-meridien-am,
+.dtp a.dtp-meridien-pm {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================
+   MDL SWITCH / CHECKBOX / RADIO
+   ============================================ */
+.mdl-switch__track {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.mdl-switch.is-checked .mdl-switch__track {
+  background-color: rgba(88, 166, 255, 0.5) !important;
+}
+
+.mdl-switch__thumb {
+  background-color: var(--text-secondary) !important;
+}
+
+.mdl-switch.is-checked .mdl-switch__thumb {
+  background-color: var(--accent) !important;
+}
+
+.mdl-checkbox__box-outline {
+  border-color: var(--border-default) !important;
+}
+
+.mdl-checkbox.is-checked .mdl-checkbox__box-outline {
+  border-color: var(--accent) !important;
+}
+
+.mdl-checkbox__tick-outline {
+  background-color: var(--accent) !important;
+}
+
+.mdl-radio__outer-circle {
+  border-color: var(--border-default) !important;
+}
+
+.mdl-radio.is-checked .mdl-radio__outer-circle {
+  border-color: var(--accent) !important;
+}
+
+.mdl-radio__inner-circle {
+  background-color: var(--accent) !important;
+}
+
+/* ============================================
+   MDL SLIDER
+   ============================================ */
+.mdl-slider.is-upgraded {
+  color: var(--accent) !important;
+}
+
+.mdl-slider.is-upgraded::-webkit-slider-thumb {
+  background-color: var(--accent) !important;
+}
+
+.mdl-slider.is-upgraded::-moz-range-thumb {
+  background-color: var(--accent) !important;
+}
+
+.mdl-slider__background-lower {
+  background-color: var(--accent) !important;
+}
+
+.mdl-slider__background-upper {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* ============================================
+   MDL SNACKBAR
+   ============================================ */
+.mdl-snackbar {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.mdl-snackbar__action {
+  color: var(--accent) !important;
+}
+
+/* ============================================
+   MDL TEXT FIELD EXPANDABLE
+   ============================================ */
+.mdl-textfield__expandable-holder {
+  background-color: transparent !important;
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+a,
+a:visited {
+  color: var(--accent) !important;
+}
+
+a:hover,
+a:active,
+a:focus {
+  color: var(--accent-hover) !important;
+}
+
+/* ============================================
+   HELP / TAGS
+   ============================================ */
+.help-box {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+div.tag-list-box .tag-list-header {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+div.tag-list-box .tag-list-body .tags-list-items {
+  border-bottom-color: var(--border-default) !important;
+}
+
+/* ============================================
+   ACTION BAR / TOOLBAR
+   ============================================ */
+#container #actions-bar {
+  background-color: transparent !important;
+}
+
+#actions #page-title {
+  color: var(--text-secondary) !important;
+}
+
+#actions #logo {
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   DATA HEADER
+   ============================================ */
+#content .data-header li {
+  color: var(--text-primary) !important;
+}
+
+#content .data-header li a {
+  color: var(--text-secondary) !important;
+}
+
+#content .data-header-minimal {
+  border-bottom-color: var(--border-default) !important;
+}
+
+#content .data-header-minimal li a {
+  color: var(--text-muted) !important;
+}
+
+/* ============================================
+   DROPZONE / FILE UPLOAD
+   ============================================ */
+#content .data .dropzone {
+  border-color: var(--success) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   DEBUG
+   ============================================ */
+#debuginfo {
+  background-color: var(--warning-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ============================================
+   SCROLLBARS (WebKit)
+   ============================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-tertiary);
+  border-radius: 5px;
+  border: 2px solid var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-default);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--bg-primary);
+}
+
+/* ============================================
+   MDL CARD / SUPPORTING TEXT
+   ============================================ */
+.mdl-card {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.mdl-card__title {
+  color: var(--text-primary) !important;
+}
+
+.mdl-card__subtitle-text {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-card__supporting-text {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-card__actions {
+  border-top-color: var(--border-default) !important;
+}
+
+/* ============================================
+   MDL LIST
+   ============================================ */
+.mdl-list__item {
+  color: var(--text-primary) !important;
+}
+
+.mdl-list__item-icon {
+  color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   MDL TABLE
+   ============================================ */
+.mdl-data-table {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+.mdl-data-table th {
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-default) !important;
+}
+
+.mdl-data-table td {
+  color: var(--text-primary) !important;
+  border-top-color: var(--border-default) !important;
+}
+
+/* ============================================
+   ADDITIONAL OVERRIDES
+   ============================================ */
+#alert #alert-pass {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+#alert #alert-text {
+  color: var(--text-primary) !important;
+}
+
+.msg-option-unvailable {
+  background-color: var(--warning-bg) !important;
+  color: var(--warning) !important;
+}
+
+/* Option disabled in config */
+#content .tblConfig .option-disabled {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--warning) !important;
+}
+
+/* Custom combobox */
+.custom-combobox input {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-default) !important;
+}
+
+/* Image popup */
+#box-popup.image {
+  background-color: transparent !important;
+}
+
+#box-popup.image > div.title {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Tab data */
+.tab-data {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Center / alignment helpers - keep but ensure text color */
+.center,
+.right,
+.left {
+  color: inherit !important;
+}
+
+/* Item actions background */
+.item-actions,
+.tab-actions {
+  background-color: transparent !important;
+}
+
+/* Header grey class */
+.header-grey {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Shadow helper override */
+.shadow {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* ============================================
+   MATERIAL DESIGN LITE OVERRIDES
+   ============================================ */
+/* Override primary text color used in MDL */
+.mdl-color-text--primary {
+  color: var(--text-primary) !important;
+}
+
+.mdl-color-text--primary-dark {
+  color: var(--text-primary) !important;
+}
+
+.mdl-color-text--secondary {
+  color: var(--text-secondary) !important;
+}
+
+.mdl-color-text--accent {
+  color: var(--accent) !important;
+}
+
+/* Override primary background */
+.mdl-color--primary {
+  background-color: var(--bg-secondary) !important;
+}
+
+.mdl-color--primary-dark {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Override white/black backgrounds */
+.mdl-color--white {
+  background-color: var(--bg-secondary) !important;
+}
+
+.mdl-color-text--white {
+  color: #ffffff !important;
+}
+
+.mdl-color--black {
+  background-color: #000000 !important;
+}
+
+/* ============================================
+   RESPONSIVE OVERRIDES
+   ============================================ */
+@media screen and (max-width: 1000px) {
+  footer {
+    background-color: var(--bg-secondary) !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #content .mdl-tabs__tab-bar {
+    background-color: var(--bg-secondary) !important;
+  }
+}

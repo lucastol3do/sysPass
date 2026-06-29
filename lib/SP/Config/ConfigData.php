@@ -2211,4 +2211,174 @@ final class ConfigData implements JsonSerializable
     {
         $this->applicationUrl = $applicationUrl ? rtrim($applicationUrl, '/') : null;
     }
+
+    // ---- OIDC Configuration ----
+
+    /**
+     * @var bool
+     */
+    protected $oidcEnabled = false;
+
+    /**
+     * @var string
+     */
+    protected $oidcDiscoveryUrl = '';
+
+    /**
+     * @var string
+     */
+    protected $oidcClientId = '';
+
+    /**
+     * @var string
+     */
+    protected $oidcClientSecret = '';
+
+    /**
+     * @var string
+     */
+    protected $oidcRedirectUri = '';
+
+    /**
+     * @var string
+     */
+    protected $oidcScopes = 'openid profile email';
+
+    /**
+     * @var int
+     */
+    protected $oidcDefaultGroup = 0;
+
+    /**
+     * @var int
+     */
+    protected $oidcDefaultProfile = 0;
+
+    /**
+     * @return bool
+     */
+    public function isOidcEnabled(): bool
+    {
+        return $this->oidcEnabled;
+    }
+
+    /**
+     * @param bool $oidcEnabled
+     */
+    public function setOidcEnabled(bool $oidcEnabled): void
+    {
+        $this->oidcEnabled = $oidcEnabled;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOidcDiscoveryUrl(): string
+    {
+        return $this->oidcDiscoveryUrl;
+    }
+
+    /**
+     * @param string $oidcDiscoveryUrl
+     */
+    public function setOidcDiscoveryUrl(string $oidcDiscoveryUrl): void
+    {
+        $this->oidcDiscoveryUrl = $oidcDiscoveryUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOidcClientId(): string
+    {
+        return $this->oidcClientId;
+    }
+
+    /**
+     * @param string $oidcClientId
+     */
+    public function setOidcClientId(string $oidcClientId): void
+    {
+        $this->oidcClientId = $oidcClientId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOidcClientSecret(): string
+    {
+        return $this->oidcClientSecret;
+    }
+
+    /**
+     * @param string $oidcClientSecret
+     */
+    public function setOidcClientSecret(string $oidcClientSecret): void
+    {
+        $this->oidcClientSecret = $oidcClientSecret;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOidcRedirectUri(): string
+    {
+        return $this->oidcRedirectUri;
+    }
+
+    /**
+     * @param string $oidcRedirectUri
+     */
+    public function setOidcRedirectUri(string $oidcRedirectUri): void
+    {
+        $this->oidcRedirectUri = $oidcRedirectUri;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOidcScopes(): string
+    {
+        return $this->oidcScopes;
+    }
+
+    /**
+     * @param string $oidcScopes
+     */
+    public function setOidcScopes(string $oidcScopes): void
+    {
+        $this->oidcScopes = $oidcScopes;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOidcDefaultGroup(): int
+    {
+        return $this->oidcDefaultGroup;
+    }
+
+    /**
+     * @param int $oidcDefaultGroup
+     */
+    public function setOidcDefaultGroup(int $oidcDefaultGroup): void
+    {
+        $this->oidcDefaultGroup = $oidcDefaultGroup;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOidcDefaultProfile(): int
+    {
+        return $this->oidcDefaultProfile;
+    }
+
+    /**
+     * @param int $oidcDefaultProfile
+     */
+    public function setOidcDefaultProfile(int $oidcDefaultProfile): void
+    {
+        $this->oidcDefaultProfile = $oidcDefaultProfile;
+    }
 }

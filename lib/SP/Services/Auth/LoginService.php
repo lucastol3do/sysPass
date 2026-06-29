@@ -52,6 +52,7 @@ use SP\Providers\Auth\Database\DatabaseAuthData;
 use SP\Providers\Auth\Ldap\LdapAuth;
 use SP\Providers\Auth\Ldap\LdapAuthData;
 use SP\Providers\Auth\Ldap\LdapCode;
+use SP\Providers\Auth\Oidc\OidcAuthData;
 use SP\Repositories\NoSuchItemException;
 use SP\Repositories\Track\TrackRequest;
 use SP\Services\Crypt\TemporaryMasterPassService;
@@ -721,5 +722,98 @@ final class LoginService extends Service
         }
 
         return null;
+    }
+
+    /**
+     * Autentificación OIDC
+     *
+     * @param OidcAuthData $authData
+     *
+     * @return bool|null
+     * @throws AuthException
+     */
+    private function authOidc(OidcAuthData $authData)
+    {
+        $eventMessage = EventMessage::factory()
+            ->addDetail(__u('Type'), __FUNCTION__)
+            ->addDetail(__u('OIDC Server'), $authData->getServer());
+
+        if ($authData->getAuthenticated() === false) {
+            $this->addTracking();
+
+            $eventMessage->addDescription(__u('Wrong login'));
+
+            $this->eventDispatcher->notifyEvent(
+                'login.auth.oidc',
+                new Event($this, $eventMessage)
+            );
+
+            throw new AuthException(
+                __u('OIDC authentication failed'),
+                AuthException::INFO,
+                __FUNCTION__,
+                self::STATUS_INVALID_LOGIN
+            );
+        }
+
+        try {
+            $userLogin = $authData->getUsername() ?: $authData->getEmail();
+
+            if (empty($userLogin)) {
+                throw new AuthException(
+                    __u('OIDC user not found'),
+                    AuthException::ERROR,
+                    __FUNCTION__,
+                    self::STATUS_INVALID_LOGIN
+                );
+            }
+
+            // Check if user exists, create if auto-provisioning is enabled
+            if (!$this->userService->checkExistsByLogin($userLogin)) {
+                if ($this->configData->getOidcDefaultGroup() > 0
+                    || $this->configData->getOidcDefaultProfile() > 0
+                ) {
+                    $userLoginRequest = new UserLoginRequest();
+                    $userLoginRequest->setLogin($userLogin);
+                    $userLoginRequest->setName($authData->getName() ?: $userLogin);
+                    $userLoginRequest->setEmail($authData->getEmail());
+
+                    $this->userService->createOnLogin($userLoginRequest);
+
+                    $this->eventDispatcher->notifyEvent(
+                        'login.auth.oidc.create',
+                        new Event($this, $eventMessage->addDetail(__u('User created'), $userLogin))
+                    );
+                } else {
+                    throw new AuthException(
+                        __u('OIDC user not found and auto-provisioning is disabled'),
+                        AuthException::ERROR,
+                        __FUNCTION__,
+                        self::STATUS_INVALID_LOGIN
+                    );
+                }
+            }
+
+            $this->userLoginData->setLoginUser($userLogin);
+
+            $eventMessage->addDetail(__u('User'), $userLogin);
+
+            $this->eventDispatcher->notifyEvent(
+                'login.auth.oidc',
+                new Event($this, $eventMessage)
+            );
+
+            return true;
+        } catch (AuthException $e) {
+            throw $e;
+        } catch (Exception $e) {
+            throw new AuthException(
+                __u('Internal error'),
+                AuthException::ERROR,
+                __FUNCTION__,
+                Service::STATUS_INTERNAL_ERROR,
+                $e
+            );
+        }
     }
 }

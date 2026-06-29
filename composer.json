@@ -28,6 +28,7 @@
     "guzzlehttp/guzzle": "^7.5",
     "monolog/monolog": "^3.0",
     "symfony/error-handler": "^6.0",
+    "jumbojett/openid-connect-php": "^1.0",
     "ext-pdo": "*",
     "ext-dom": "*",
     "ext-gd": "*",

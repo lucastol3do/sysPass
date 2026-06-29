@@ -42,6 +42,8 @@ use SP\Providers\Auth\Ldap\LdapAuth;
 use SP\Providers\Auth\Ldap\LdapAuthData;
 use SP\Providers\Auth\Ldap\LdapException;
 use SP\Providers\Auth\Ldap\LdapParams;
+use SP\Providers\Auth\Oidc\OidcAuth;
+use SP\Providers\Auth\Oidc\OidcAuthData;
 use SP\Providers\Provider;
 use SP\Services\Auth\AuthException;
 
@@ -76,6 +78,10 @@ final class AuthProvider extends Provider
      * @var Database
      */
     protected $database;
+    /**
+     * @var OidcAuth
+     */
+    protected $oidcAuth;
 
     /**
      * Probar los métodos de autentificación
@@ -190,6 +196,28 @@ final class AuthProvider extends Provider
     }
 
     /**
+     * Autentificación de usuarios con OIDC
+     *
+     * @return bool|OidcAuthData
+     */
+    public function authOidc()
+    {
+        try {
+            $oidcAuthData = $this->oidcAuth->authenticate($this->userLoginData);
+
+            if ($oidcAuthData->getAuthenticated()) {
+                $oidcAuthData->setAuthGranted(true);
+            }
+
+            return $oidcAuthData;
+        } catch (\Exception $e) {
+            processException($e);
+
+            return false;
+        }
+    }
+
+    /**
      * Auth constructor.
      *
      * @param Container $dic
@@ -209,6 +237,11 @@ final class AuthProvider extends Provider
 
         if ($this->configData->isLdapEnabled()) {
             $this->registerAuth('authLdap');
+        }
+
+        if ($this->configData->isOidcEnabled()) {
+            $this->registerAuth('authOidc');
+            $this->oidcAuth = $dic->get(OidcAuth::class);
         }
 
         $this->registerAuth('authDatabase');

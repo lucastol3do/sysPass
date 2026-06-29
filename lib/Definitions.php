@@ -37,6 +37,7 @@ use SP\Core\UI\Theme;
 use SP\Core\UI\ThemeInterface;
 use SP\Http\Client;
 use SP\Http\Request;
+use SP\Providers\Auth\Oidc\OidcAuth;
 use SP\Services\Account\AccountAclService;
 use SP\Storage\Database\DatabaseConnectionData;
 use SP\Storage\Database\DBStorageInterface;
@@ -93,6 +94,7 @@ return [
     Logger::class => create(Logger::class)
         ->constructor('syspass'),
     AccountAclService::class => autowire(AccountAclService::class),
+    OidcAuth::class => autowire(OidcAuth::class),
     \GuzzleHttp\Client::class => create(GuzzleHttp\Client::class)
         ->constructor(factory([Client::class, 'getOptions']))
 ];
