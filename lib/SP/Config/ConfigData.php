@@ -2254,6 +2254,23 @@ final class ConfigData implements JsonSerializable
      */
     protected $oidcDefaultProfile = 0;
 
+    // ---- Password Expiry Notification Configuration ----
+
+    /**
+     * @var bool
+     */
+    protected $passwordExpiryNotificationEnabled = false;
+
+    /**
+     * @var int
+     */
+    protected $passwordExpiryNotificationDays = 15;
+
+    /**
+     * @var bool
+     */
+    protected $passwordExpiryNotificationEmailEnabled = false;
+
     /**
      * @return bool
      */
@@ -2380,5 +2397,65 @@ final class ConfigData implements JsonSerializable
     public function setOidcDefaultProfile(int $oidcDefaultProfile): void
     {
         $this->oidcDefaultProfile = $oidcDefaultProfile;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPasswordExpiryNotificationEnabled(): bool
+    {
+        return $this->passwordExpiryNotificationEnabled;
+    }
+
+    /**
+     * @param bool $passwordExpiryNotificationEnabled
+     *
+     * @return $this
+     */
+    public function setPasswordExpiryNotificationEnabled(bool $passwordExpiryNotificationEnabled): self
+    {
+        $this->passwordExpiryNotificationEnabled = $passwordExpiryNotificationEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPasswordExpiryNotificationDays(): int
+    {
+        return $this->passwordExpiryNotificationDays;
+    }
+
+    /**
+     * @param int $passwordExpiryNotificationDays
+     *
+     * @return $this
+     */
+    public function setPasswordExpiryNotificationDays(int $passwordExpiryNotificationDays): self
+    {
+        $this->passwordExpiryNotificationDays = $passwordExpiryNotificationDays;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPasswordExpiryNotificationEmailEnabled(): bool
+    {
+        return $this->passwordExpiryNotificationEmailEnabled;
+    }
+
+    /**
+     * @param bool $passwordExpiryNotificationEmailEnabled
+     *
+     * @return $this
+     */
+    public function setPasswordExpiryNotificationEmailEnabled(bool $passwordExpiryNotificationEmailEnabled): self
+    {
+        $this->passwordExpiryNotificationEmailEnabled = $passwordExpiryNotificationEmailEnabled;
+
+        return $this;
     }
 }

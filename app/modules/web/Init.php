@@ -85,7 +85,7 @@ final class Init extends ModuleBase
     /**
      * List of controllers that don't need to update the user's session activity
      */
-    const NO_SESSION_ACTIVITY = ['items', 'login'];
+    const NO_SESSION_ACTIVITY = ['items', 'login', 'cron'];
 
     /**
      * @var SessionContext
