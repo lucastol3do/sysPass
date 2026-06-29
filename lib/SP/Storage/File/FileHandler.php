@@ -71,7 +71,7 @@ final class FileHandler
     public function write($data)
     {
         if (!is_resource($this->handle)) {
-            $this->open('wb');
+            $this->open(file_exists($this->file) && filesize($this->file) > 0 ? 'ab' : 'wb');
         }
 
         if (@fwrite($this->handle, $data) === false) {
@@ -239,10 +239,12 @@ final class FileHandler
         }
 
         while (!feof($this->handle)) {
+            $chunkSize = (int)round($rate);
+
             if ($chunker !== null) {
-                $chunker(fread($this->handle, round($rate)));
+                $chunker(fread($this->handle, $chunkSize));
             } else {
-                print fread($this->handle, round($rate));
+                print fread($this->handle, $chunkSize);
                 ob_flush();
                 flush();
             }

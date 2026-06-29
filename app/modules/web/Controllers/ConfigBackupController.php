@@ -172,8 +172,6 @@ final class ConfigBackupController extends SimpleControllerBase
             $response->header('Cache-Control', 'max-age=60, must-revalidate');
             $response->header('Content-length', $file->getFileSize());
             $response->header('Content-type', $file->getFileType());
-            $response->header('Content-Description', ' sysPass file');
-            $response->header('Content-transfer-encoding', 'chunked');
             $response->header('Content-Disposition', 'attachment; filename="' . basename($file->getFile()) . '"');
             $response->header('Set-Cookie', 'fileDownload=true; path=/');
             $response->send();
@@ -218,8 +216,6 @@ final class ConfigBackupController extends SimpleControllerBase
             $response->header('Cache-Control', 'max-age=60, must-revalidate');
             $response->header('Content-length', $file->getFileSize());
             $response->header('Content-type', $file->getFileType());
-            $response->header('Content-Description', ' sysPass file');
-            $response->header('Content-transfer-encoding', 'chunked');
             $response->header('Content-Disposition', 'attachment; filename="' . basename($file->getFile()) . '"');
             $response->header('Set-Cookie', 'fileDownload=true; path=/');
             $response->send();
@@ -264,8 +260,6 @@ final class ConfigBackupController extends SimpleControllerBase
             $response->header('Cache-Control', 'max-age=60, must-revalidate');
             $response->header('Content-length', $file->getFileSize());
             $response->header('Content-type', $file->getFileType());
-            $response->header('Content-Description', ' sysPass file');
-            $response->header('Content-transfer-encoding', 'chunked');
             $response->header('Content-Disposition', 'attachment; filename="' . basename($file->getFile()) . '"');
             $response->header('Set-Cookie', 'fileDownload=true; path=/');
             $response->send();

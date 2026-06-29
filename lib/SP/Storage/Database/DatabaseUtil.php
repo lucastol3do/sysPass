@@ -171,12 +171,16 @@ final class DatabaseUtil
      */
     public function escape($str)
     {
+        if ($str === null || $str === '') {
+            return "''";
+        }
+
         try {
-            return $this->DBStorage->getConnection()->quote(trim($str));
+            return $this->DBStorage->getConnection()->quote(trim((string)$str));
         } catch (Exception $e) {
             processException($e);
         }
 
-        return $str;
+        return "'" . addcslashes((string)$str, "\\'\"\0\n\r") . "'";
     }
 }

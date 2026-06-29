@@ -296,7 +296,7 @@ final class FileBackupService extends Service
         // Guardar los datos
         foreach ($resTables as $tableName) {
             // No guardar las vistas!
-            if (strrpos($tableName, '_v') !== false) {
+            if (substr($tableName, -2) === '_v') {
                 continue;
             }
 
@@ -312,10 +312,12 @@ final class FileBackupService extends Service
 
                 $field = 1;
                 foreach ($row as $value) {
-                    if (is_numeric($value)) {
-                        $fileHandler->write($value);
+                    if ($value === null) {
+                        $fileHandler->write('NULL');
+                    } elseif (is_numeric($value)) {
+                        $fileHandler->write((string)$value);
                     } else {
-                        $fileHandler->write($databaseUtil->escape($value));
+                        $fileHandler->write($databaseUtil->escape((string)$value));
                     }
 
                     if ($field < $numColumns) {
