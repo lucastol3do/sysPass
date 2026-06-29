@@ -111,18 +111,25 @@ final class Config
 
                     logger('Config cache loaded');
                 } else {
-                    if (file_exists($this->fileStorage->getFileHandler()->getFile())) {
+                    $configFile = $this->fileStorage->getFileHandler()->getFile();
+
+                    if (file_exists($configFile) && filesize($configFile) > 0) {
                         $this->configData = $this->loadConfigFromFile();
                         $this->fileCache->save($this->configData);
                     } else {
-                        $configData = new ConfigData();
+                        // Empty or missing config — treat as fresh install.
+                        // Do NOT call saveConfig() here because it requires a
+                        // session context that does not exist during initial setup.
+                        // The installer will create config.xml after setup.
+                        $this->configData = new ConfigData();
+                        $this->configData->setPasswordSalt(PasswordUtil::generateRandomBytes(30));
 
-                        // Generate a random salt that is used to add more seed to some passwords
-                        $configData->setPasswordSalt(PasswordUtil::generateRandomBytes(30));
+                        // Remove empty config.xml if it exists
+                        if (file_exists($configFile)) {
+                            @unlink($configFile);
+                        }
 
-                        $this->saveConfig($configData, false);
-
-                        logger('Config file created', 'INFO');
+                        logger('Config file not found or empty — fresh install mode', 'INFO');
                     }
 
                     logger('Config loaded');
