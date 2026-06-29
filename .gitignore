@@ -65,3 +65,8 @@ tests/_output/*
 composer.phar
 
 !.blank
+
+# Environment files (keep .env.example)
+.env
+.env.*
+!.env.example
