@@ -39,6 +39,11 @@ final class Hash
     const MAX_KEY_LENGTH = 72;
 
     /**
+     * Algoritmo de hashing preferido
+     */
+    const PREFERRED_ALGO = PASSWORD_ARGON2ID;
+
+    /**
      * Comprobar el hash de una clave.
      *
      * @param string $key  con la clave a comprobar
@@ -65,7 +70,7 @@ final class Hash
             $key = hash('sha256', $key);
 
             if ($isCheck === false) {
-                logger('[INFO] Password string shortened using SHA256 and then BCRYPT');
+                logger('[INFO] Password string shortened using SHA256');
             }
         }
 
@@ -75,13 +80,41 @@ final class Hash
     /**
      * Generar un hash de una clave criptográficamente segura
      *
+     * Usa Argon2id quando disponível, com fallback para bcrypt.
+     *
      * @param string $key con la clave a 'hashear'
      *
      * @return string con el hash de la clave
      */
     public static function hashKey($key)
     {
-        return password_hash(self::getKey($key, false), PASSWORD_BCRYPT);
+        $preparedKey = self::getKey($key, false);
+
+        // Use Argon2id if available (PHP 7.3+ with sodium extension)
+        if (defined('PASSWORD_ARGON2ID')) {
+            return password_hash($preparedKey, PASSWORD_ARGON2ID, [
+                'memory_cost' => 65536,  // 64 MB
+                'time_cost'   => 4,      // 4 iterations
+                'threads'     => 1,      // 1 thread (web server friendly)
+            ]);
+        }
+
+        // Fallback to bcrypt
+        return password_hash($preparedKey, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * Verificar se un hash precisa ser re-hasheado (migración para Argon2id)
+     *
+     * @param string $hash
+     *
+     * @return bool
+     */
+    public static function needsRehash(string $hash): bool
+    {
+        $algo = defined('PASSWORD_ARGON2ID') ? PASSWORD_ARGON2ID : PASSWORD_BCRYPT;
+
+        return password_needs_rehash($hash, $algo);
     }
 
     /**

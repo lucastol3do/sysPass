@@ -504,5 +504,22 @@ final class Bootstrap
     {
         $response->header('X-FRAME-OPTIONS', 'DENY');
         $response->header('Content-Security-Policy', 'frame-ancestors \'none\'');
+
+        // HSTS — inform browsers to only use HTTPS (1 year, include subdomains)
+        if ($this->request->isHttps()) {
+            $response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        }
+
+        // Prevent MIME type sniffing
+        $response->header('X-Content-Type-Options', 'nosniff');
+
+        // XSS Protection (legacy browsers)
+        $response->header('X-XSS-Protection', '1; mode=block');
+
+        // Referrer Policy — send origin only on cross-origin requests
+        $response->header('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+        // Permissions Policy — disable unnecessary browser features
+        $response->header('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
     }
 }

@@ -183,6 +183,10 @@ final class LoginService extends Service
         $this->loadMasterPass();
         $this->setUserSession();
         $this->loadUserPreferences();
+
+        // Regenerate session ID after successful login to prevent session fixation
+        session_regenerate_id(true);
+
         $this->cleanUserData();
 
         $uri = new Uri('index.php');

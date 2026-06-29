@@ -116,7 +116,19 @@ final class Database implements AuthInterface
                 return $this->userPassService->migrateUserPassById($userLoginResponse->getId(), $this->userLoginData->getLoginPass());
             }
 
-            return Hash::checkHashKey($this->userLoginData->getLoginPass(), $userLoginResponse->getPass());
+            $authenticated = Hash::checkHashKey($this->userLoginData->getLoginPass(), $userLoginResponse->getPass());
+
+            // Migrate bcrypt hashes to Argon2id on successful authentication
+            if ($authenticated && Hash::needsRehash($userLoginResponse->getPass())) {
+                try {
+                    $this->userPassService->migrateUserPassById($userLoginResponse->getId(), $this->userLoginData->getLoginPass());
+                } catch (Exception $e) {
+                    // Log but don't fail login if rehash fails
+                    processException($e);
+                }
+            }
+
+            return $authenticated;
         } catch (Exception $e) {
             processException($e);
         }
