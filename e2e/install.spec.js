@@ -170,32 +170,23 @@ test.describe('sysPass Installation', () => {
     // Navigate to login page (should already be installed from previous test)
     await page.goto(`${BASE_URL}/index.php?r=login/index`, { waitUntil: 'networkidle' });
 
+    // Verify we're on the login page (not redirected back to install)
+    await expect(page).toHaveURL(/login/);
+
     // Fill login credentials
     await page.locator('#user').fill(ADMIN_LOGIN);
     await page.locator('input[name="pass"]').fill(ADMIN_PASS);
 
-    // Submit login
-    const loginPromise = page.waitForResponse(
-      resp => resp.url().includes('login/login') && resp.status() === 200,
-      { timeout: 15000 }
-    );
+    // Submit login and wait for navigation
+    const [response] = await Promise.all([
+      page.waitForURL(/account|search|main/, { timeout: 15000 }).catch(() => null),
+      page.locator('#frmLogin button[type="submit"], #frmLogin input[type="submit"]')
+        .first()
+        .click(),
+    ]);
 
-    await page.locator('#frmLogin button[type="submit"], #frmLogin input[type="submit"]')
-      .first()
-      .click();
-
-    const loginResponse = await loginPromise;
-    
-    // Handle both JSON and non-JSON responses
-    const contentType = loginResponse.headers()['content-type'] || '';
-    if (contentType.includes('application/json') || contentType.includes('text/json')) {
-      const loginBody = await loginResponse.json();
-      // Verify login succeeded
-      expect(loginBody.status).toBe(0);
-    } else {
-      // Non-JSON response means there may be a PHP error — just verify we got a response
-      expect(loginResponse.status()).toBe(200);
-    }
+    // Verify we're no longer on the login page (successful login redirects)
+    await expect(page).not.toHaveURL(/login/);
   });
 
   test('config.xml exists after installation', async ({ request }) => {
