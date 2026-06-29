@@ -98,8 +98,8 @@ RUN set -eux; \
     chmod -R 755 /var/www/html; \
     mkdir -p /var/www/html/app/cache /var/www/html/app/config \
         /var/www/html/app/backup /var/www/html/app/temp; \
-    chmod -R 775 /var/www/html/app/cache /var/www/html/app/config \
-        /var/www/html/app/backup /var/www/html/app/temp
+    chmod 750 /var/www/html/app/config; \
+    chmod 770 /var/www/html/app/cache /var/www/html/app/backup /var/www/html/app/temp
 
 # ---------------------------------------------------------------------------
 # Health check
