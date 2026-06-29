@@ -63,7 +63,16 @@ RUN set -eux; \
     ; \
     # Enable Apache modules
     a2enmod rewrite headers expires; \
-    # Cleanup
+    # Install runtime libraries that gd.so depends on (prevent autoremove from purging them)
+    apt-get install -y --no-install-recommends \
+        libfreetype6 \
+        libjpeg62-turbo \
+        libpng16-16 \
+        libgd3 \
+        libonig5 \
+        libzip4 \
+    ; \
+    # Cleanup: purge -dev headers only, runtime libs stay
     apt-get purge -y libcurl4-openssl-dev libfreetype6-dev libjpeg62-turbo-dev \
         libpng-dev libgd-dev libonig-dev libxml2-dev libzip-dev zlib1g-dev; \
     apt-get autoremove -y; \
