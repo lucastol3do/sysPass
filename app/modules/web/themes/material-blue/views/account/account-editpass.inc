@@ -149,6 +149,10 @@ $accountAcl = $_getvar('accountAcl');
                         </div>
                         <i class="material-icons btn-action"
                            title="<?php echo __('Select date'); ?>">date_range</i>
+                        <i class="material-icons btn-action"
+                           title="<?php echo __('Clear date'); ?>"
+                           onclick="document.getElementById('password_date_expire').value='';document.querySelector('input[name=password_date_expire_unix]').value='';document.querySelector('input[name=password_date_expire_clear]').value='1';">clear</i>
+                        <input type="hidden" name="password_date_expire_clear" value="0"/>
                     </td>
                 </tr>
             <?php endif; ?>

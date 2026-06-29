@@ -114,6 +114,13 @@ final class AccountForm extends FormBase implements FormInterface
 
         if ($this->request->analyzeInt('password_date_expire')) {
             $this->accountRequest->passDateChange = $this->request->analyzeInt('password_date_expire_unix');
+        } else {
+            // Preserve existing passDateChange when the date field is empty (not modified)
+            // Set to 0 only if the user explicitly cleared the date
+            $clearDate = $this->request->analyzeString('password_date_expire_clear');
+            if ($clearDate === '1') {
+                $this->accountRequest->passDateChange = 0;
+            }
         }
 
         $this->accountRequest->parentId = $this->request->analyzeInt('parent_account_id');
