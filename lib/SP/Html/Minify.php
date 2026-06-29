@@ -165,10 +165,10 @@ final class Minify
 
         switch ($this->type) {
             case self::FILETYPE_JS;
-                $response->header('Content-type', 'application/javascript; charset: UTF-8');
+                $response->header('Content-type', 'application/javascript');
                 break;
             case self::FILETYPE_CSS:
-                $response->header('Content-type', 'text/css; charset: UTF-8');
+                $response->header('Content-type', 'text/css');
                 break;
         }
     }
