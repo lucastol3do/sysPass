@@ -46,6 +46,7 @@ use SP\Http\Request;
 use SP\Modules\Api\Init as InitApi;
 use SP\Modules\Web\Init as InitWeb;
 use SP\Plugin\PluginManager;
+use SP\Modules\Api\Controllers\RestController;
 use SP\Services\Api\ApiRequest;
 use SP\Services\Api\JsonRpcResponse;
 use SP\Services\Upgrade\UpgradeConfigService;
@@ -145,6 +146,120 @@ final class Bootstrap
             /** @var Klein $router */
             $router->response()->body(__($err_msg));
         });
+
+        // REST API routes
+        $this->router->respond(['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+            '@/api/rest',
+            function ($request, $response, $service) use ($oops) {
+                try {
+                    logger('REST API route');
+
+                    // Handle CORS preflight
+                    if ($request->method() === 'OPTIONS') {
+                        $response->header('Content-type', 'application/json; charset=utf-8');
+                        $response->code(204);
+                        return;
+                    }
+
+                    $this->setCors($response);
+                    $this->initializeCommon();
+
+                    $uri = $request->uri();
+                    $method = $request->method();
+
+                    // Parse URI: /api/rest/{resource}[/{id}][/{action}]
+                    $path = parse_url($uri, PHP_URL_PATH);
+                    $path = rtrim($path, '/');
+
+                    $segments = explode('/', $path);
+                    // Remove empty segments and shift off leading empty strings
+                    $segments = array_values(array_filter($segments, function ($s) { return $s !== ''; }));
+
+                    // Expected: [api, rest, resource, ...]
+                    if (count($segments) < 3) {
+                        $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                        return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                    }
+
+                    $resource = $segments[2] ?? '';
+                    $id = isset($segments[3]) && is_numeric($segments[3]) ? (int)$segments[3] : null;
+                    $subAction = isset($segments[4]) ? $segments[4] : null;
+
+                    $controller = self::$container->get(RestController::class);
+
+                    // Route based on resource, method, and optional sub-action
+                    switch ($resource) {
+                        case 'accounts':
+                            if ($subAction === 'permissions' && $id !== null && $method === 'GET') {
+                                $controller->accountPermissions($request, $id);
+                            } elseif ($id !== null && $method === 'GET') {
+                                $controller->viewAccount($request, $id);
+                            } elseif ($id !== null && $method === 'PUT') {
+                                $controller->editAccount($request, $id);
+                            } elseif ($id !== null && $method === 'DELETE') {
+                                $controller->deleteAccount($request, $id);
+                            } elseif ($id === null && $method === 'GET') {
+                                $controller->searchAccounts($request);
+                            } elseif ($id === null && $method === 'POST') {
+                                $controller->createAccount($request);
+                            } else {
+                                $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                                return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                            }
+                            break;
+
+                        case 'categories':
+                            if ($id === null && $method === 'GET') {
+                                $controller->listCategories($request);
+                            } else {
+                                $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                                return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                            }
+                            break;
+
+                        case 'clients':
+                            if ($id === null && $method === 'GET') {
+                                $controller->listClients($request);
+                            } else {
+                                $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                                return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                            }
+                            break;
+
+                        case 'tags':
+                            if ($id === null && $method === 'GET') {
+                                $controller->listTags($request);
+                            } else {
+                                $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                                return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                            }
+                            break;
+
+                        case 'user-groups':
+                            if ($id === null && $method === 'GET') {
+                                $controller->listUserGroups($request);
+                            } else {
+                                $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                                return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                            }
+                            break;
+
+                        default:
+                            $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                            return $response->body(\SP\Http\RestJsonResponse::error($oops, 404));
+                    }
+
+                    return $response->send(true);
+                } catch (\Exception $e) {
+                    processException($e);
+
+                    $response->headers()->set('Content-type', 'application/json; charset=utf-8');
+                    return $response->body(\SP\Http\RestJsonResponse::error(__u('Internal error'), 500));
+                } finally {
+                    $this->router->skipRemaining();
+                }
+            }
+        );
 
         // Manage requests for api module
         $this->router->respond(['POST'],
@@ -497,7 +612,7 @@ final class Bootstrap
             'Access-Control-Allow-Headers',
             'X-Requested-With, Content-Type, Accept, Origin, Authorization'
         );
-        $response->header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     }
 
     protected function setXFrame(Response $response): void
