@@ -528,7 +528,17 @@ final class Request
      */
     public function isHttps(): bool
     {
-        return $this->https;
+        if ($this->https) {
+            return true;
+        }
+
+        // Check X-Forwarded-Proto header for reverse proxy support
+        $forwardedProto = $this->request->server()->get('HTTP_X_FORWARDED_PROTO');
+        if ($forwardedProto === 'https') {
+            return true;
+        }
+
+        return false;
     }
 
     /**

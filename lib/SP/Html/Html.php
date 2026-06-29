@@ -192,13 +192,6 @@ final class Html
             return 'malformed_url';
         }
 
-        return preg_replace_callback(
-            '/["<>\']+/u',
-            function ($matches)
-            {
-                return urlencode($matches[0]);
-            },
-            strip_tags($url)
-        );
+        return htmlspecialchars(strip_tags($url), ENT_QUOTES, 'UTF-8');
     }
 }

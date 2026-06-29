@@ -213,7 +213,7 @@ final class AccountHelper extends HelperBase
 
         $this->view->assign('accountPassDate', date('Y-m-d H:i:s', $accountData->getPassDate()));
         $this->view->assign('accountPassDateChange',
-            $accountData->getPassDateChange() > 0 ? gmdate('Y-m-d', $accountData->getPassDateChange()) : 0);
+            $accountData->getPassDateChange() > 0 ? date('Y-m-d', $accountData->getPassDateChange()) : 0);
         $this->view->assign('linkedAccounts', $this->accountService->getLinked($this->accountId));
 
         $this->view->assign('accountId', $accountData->getId());

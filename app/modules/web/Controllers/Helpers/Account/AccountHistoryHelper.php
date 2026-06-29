@@ -117,7 +117,8 @@ final class AccountHistoryHelper extends HelperBase
                 ->getItemsFromArraySelected([$this->accountHistoryId]));
 
         $this->view->assign('accountPassDate', date('Y-m-d H:i:s', $accountHistoryData->getPassDate()));
-        $this->view->assign('accountPassDateChange', date('Y-m-d', $accountHistoryData->getPassDateChange() ?: 0));
+        $passDateChange = $accountHistoryData->getPassDateChange();
+        $this->view->assign('accountPassDateChange', $passDateChange > 0 ? date('Y-m-d', $passDateChange) : '');
         $this->view->assign('categories',
             SelectItemAdapter::factory(CategoryService::getItemsBasic())
                 ->getItemsFromModelSelected([$accountHistoryData->getCategoryId()]));

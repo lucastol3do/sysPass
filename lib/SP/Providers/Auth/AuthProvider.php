@@ -115,21 +115,26 @@ final class AuthProvider extends Provider
      */
     public function authLdap()
     {
-        $ldap = $this->getLdapAuth();
-        $ldapAuthData = $ldap->getLdapAuthData();
+        try {
+            $ldap = $this->getLdapAuth();
+            $ldapAuthData = $ldap->getLdapAuthData();
+            $ldapAuthData->setAuthenticated($ldap->authenticate($this->userLoginData));
 
-        $ldapAuthData->setAuthenticated($ldap->authenticate($this->userLoginData));
-
-        if ($ldapAuthData->getAuthenticated()) {
-            // Comprobamos si la cuenta está bloqueada o expirada
-            if ($ldapAuthData->getExpire() > 0) {
-                $ldapAuthData->setStatusCode(LdapAuth::ACCOUNT_EXPIRED);
-            } elseif (!$ldapAuthData->isInGroup()) {
-                $ldapAuthData->setStatusCode(LdapAuth::ACCOUNT_NO_GROUPS);
+            if ($ldapAuthData->getAuthenticated()) {
+                // Comprobamos si la cuenta está bloqueada o expirada
+                if ($ldapAuthData->getExpire() > 0) {
+                    $ldapAuthData->setStatusCode(LdapAuth::ACCOUNT_EXPIRED);
+                } elseif (!$ldapAuthData->isInGroup()) {
+                    $ldapAuthData->setStatusCode(LdapAuth::ACCOUNT_NO_GROUPS);
+                }
             }
-        }
 
-        return $ldapAuthData;
+            return $ldapAuthData;
+        } catch (LdapException $e) {
+            processException($e);
+
+            return false;
+        }
     }
 
     /**
@@ -147,7 +152,8 @@ final class AuthProvider extends Provider
             ->setGroup($this->configData->getLdapGroup())
             ->setBindDn($this->configData->getLdapBindUser())
             ->setBindPass($this->configData->getLdapBindPass())
-            ->setType($this->configData->getLdapType());
+            ->setType($this->configData->getLdapType())
+            ->setTlsEnabled($this->configData->isLdapTlsEnabled());
 
         return new LdapAuth(
             Ldap::factory(

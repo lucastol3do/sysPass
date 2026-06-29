@@ -75,7 +75,7 @@ trait RepositoryItemTrait
      */
     protected function makeItemHash($name, DBStorageInterface $DBStorage)
     {
-        $charsSrc = ['.', ' ', '_', ', ', '-', ';', '\'', '"', ':', '(', ')', '|', '/'];
+        $charsSrc = ['.', ' ', '_', ',', '-', ';', '\'', '"', ':', '(', ')', '|', '/'];
 
         $databaseUtil = new DatabaseUtil($DBStorage);
 

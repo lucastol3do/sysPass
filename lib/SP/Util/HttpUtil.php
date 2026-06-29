@@ -46,12 +46,22 @@ final class HttpUtil
     public static function checkHttps(ConfigData $configData, Request $request)
     {
         if ($configData->isHttpsEnabled() && !$request->isHttps()) {
+            $host = $request->getHttpHost();
+
+            // Handle reverse proxy: build HTTPS URL correctly
+            if (strpos($host, 'http://') === 0) {
+                $host = str_replace('http://', 'https://', $host);
+            } elseif (strpos($host, 'https://') !== 0) {
+                $host = 'https://' . $host;
+            }
+
             $serverPort = $request->getServerPort();
+            $port = ($serverPort && $serverPort != 80 && $serverPort != 443) ? ':' . $serverPort : '';
 
-            $port = $serverPort !== 443 ? ':' . $serverPort : '';
-            $host = str_replace('http', 'https', $request->getHttpHost());
-
-            header('Location: ' . $host . $port . $_SERVER['REQUEST_URI']);
+            if (!headers_sent()) {
+                header('Location: ' . $host . $port . $_SERVER['REQUEST_URI']);
+                exit();
+            }
         }
     }
 
