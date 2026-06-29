@@ -11,13 +11,16 @@ WORKDIR /build
 COPY composer.json composer.lock ./
 
 # Install production dependencies only (no dev)
+# Ignore platform reqs for gd/gettext since they're available in production stage
 RUN composer install \
     --no-dev \
     --no-interaction \
     --no-progress \
     --no-scripts \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --ignore-platform-req=ext-gd \
+    --ignore-platform-req=ext-gettext
 
 # =============================================================================
 # Stage 2: Production - PHP 8.2 Apache
