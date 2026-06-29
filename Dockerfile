@@ -38,6 +38,9 @@ RUN set -eux; \
     apt-get update; \
     apt-get install -y --no-install-recommends \
         libcurl4-openssl-dev \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
         libgd-dev \
         libonig-dev \
         libxml2-dev \
@@ -45,26 +48,27 @@ RUN set -eux; \
         zlib1g-dev \
         gettext \
         unzip \
-    ; \
-    docker-php-ext-install -j$(nproc) \
         curl \
-        dom \
-        fileinfo \
+    ; \
+    # Configure gd with freetype and jpeg
+    docker-php-ext-configure gd --with-freetype --with-jpeg; \
+    # Install PHP extensions (only those that need compilation)
+    docker-php-ext-install -j$(nproc) \
         gd \
         gettext \
-        json \
-        libxml \
         mbstring \
-        pdo \
         pdo_mysql \
-        phar \
         zip \
+        opcache \
     ; \
     # Enable Apache modules
     a2enmod rewrite headers expires; \
     # Cleanup
+    apt-get purge -y libcurl4-openssl-dev libfreetype6-dev libjpeg62-turbo-dev \
+        libpng-dev libgd-dev libonig-dev libxml2-dev libzip-dev zlib1g-dev; \
+    apt-get autoremove -y; \
     apt-get clean; \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # ---------------------------------------------------------------------------
 # Copy custom Apache virtual host config
@@ -92,11 +96,10 @@ COPY --from=builder /build/vendor /var/www/html/vendor
 RUN set -eux; \
     chown -R www-data:www-data /var/www/html; \
     chmod -R 755 /var/www/html; \
-    # Writable directories for runtime
-    chmod -R 775 /var/www/html/app/cache; \
-    chmod -R 775 /var/www/html/app/config; \
-    chmod -R 775 /var/www/html/app/backup; \
-    chmod -R 775 /var/www/html/app/temp
+    mkdir -p /var/www/html/app/cache /var/www/html/app/config \
+        /var/www/html/app/backup /var/www/html/app/temp; \
+    chmod -R 775 /var/www/html/app/cache /var/www/html/app/config \
+        /var/www/html/app/backup /var/www/html/app/temp
 
 # ---------------------------------------------------------------------------
 # Health check
