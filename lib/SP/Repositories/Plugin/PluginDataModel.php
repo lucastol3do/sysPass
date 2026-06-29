@@ -35,6 +35,7 @@ use SP\DataModel\SerializedModel;
  *
  * @package SP\Repositories\Plugin
  */
+#[\AllowDynamicProperties]
 final class PluginDataModel implements HydratableInterface
 {
     use SerializedModel;

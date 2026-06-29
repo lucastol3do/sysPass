@@ -36,7 +36,6 @@ use SP\Core\Exceptions\NoSuchPropertyException;
  *
  * @package SP\DataModel
  */
-#[\AllowDynamicProperties]
 trait EncryptedModel
 {
     /**

@@ -37,7 +37,6 @@ defined('APP_ROOT') || die();
  *
  * @package SP\Services\Import
  */
-#[\AllowDynamicProperties]
 trait XmlImportTrait
 {
     /**

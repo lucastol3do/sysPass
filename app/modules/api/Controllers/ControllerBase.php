@@ -165,7 +165,7 @@ abstract class ControllerBase
      *
      * @param string $response
      */
-    final private function sendJsonResponse(string $response)
+    private function sendJsonResponse(string $response)
     {
         $json = Json::factory($this->router->response());
         $json->returnRawJson($response);
