@@ -445,8 +445,8 @@ final class Bootstrap
                 && preg_match('/Basic\s+(.*)$/i', $server->get('REDIRECT_HTTP_AUTHORIZATION'), $matches))
         ) {
             list($name, $password) = explode(':', base64_decode($matches[1]), 2);
-            $server->set('PHP_AUTH_USER', strip_tags($name));
-            $server->set('PHP_AUTH_PW', strip_tags($password));
+            $server->set('PHP_AUTH_USER', htmlspecialchars($name, ENT_QUOTES, 'UTF-8'));
+            $server->set('PHP_AUTH_PW', htmlspecialchars($password, ENT_QUOTES, 'UTF-8'));
         }
     }
 

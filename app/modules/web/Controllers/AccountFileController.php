@@ -106,7 +106,7 @@ final class AccountFileController extends ControllerBase implements CrudControll
 
             if (in_array($type, self::MIME_VIEW)) {
                 $this->view->assign('mime', $type);
-                $this->view->assign('data', htmlentities($fileData->getContent()));
+                $this->view->assign('data', htmlspecialchars($fileData->getContent(), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
 
                 $this->eventDispatcher->notifyEvent('show.accountFile',
                     new Event($this,

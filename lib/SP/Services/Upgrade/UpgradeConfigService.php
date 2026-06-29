@@ -31,6 +31,7 @@ use SP\Config\ConfigData;
 use SP\Core\Events\Event;
 use SP\Core\Events\EventMessage;
 use SP\Core\MimeTypes;
+use SP\Core\Exceptions\SPException;
 use SP\Providers\Auth\Ldap\LdapTypeInterface;
 use SP\Providers\Log\FileLogHandler;
 use SP\Services\Service;
@@ -84,8 +85,20 @@ final class UpgradeConfigService extends Service implements UpgradeInterface
 
         $this->eventDispatcher->notifyEvent('upgrade.config.old.start', new Event($this, $message));
 
-        // Include the file, save the data from $CONFIG
-        include OLD_CONFIG_FILE;
+        // Include the old config file in a restricted scope
+        // Only allow .php files from the expected config directory
+        $oldConfigFile = realpath(OLD_CONFIG_FILE);
+        $expectedDir = realpath(APP_ROOT . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'config');
+
+        if ($oldConfigFile === false || !str_starts_with($oldConfigFile, $expectedDir)) {
+            throw new SPException(__u('Invalid config file path'), SPException::ERROR);
+        }
+
+        // Isolate include in a closure to prevent variable leakage
+        $CONFIG = (static function () use ($oldConfigFile) {
+            include $oldConfigFile;
+            return $CONFIG ?? [];
+        })();
 
         $message = EventMessage::factory();
 

@@ -208,8 +208,16 @@ final class UpgradeDatabaseService extends Service implements UpgradeInterface
     {
         $fileName = SQL_PATH . DIRECTORY_SEPARATOR . str_replace('.', '', $filename) . '.sql';
 
+        // Validate the resolved path is within the expected SQL directory
+        $realPath = realpath($fileName);
+        $expectedDir = realpath(SQL_PATH);
+
+        if ($realPath === false || $expectedDir === false || !str_starts_with($realPath, $expectedDir)) {
+            throw new UpgradeException(__u('Invalid SQL file path'));
+        }
+
         try {
-            $parser = new MySQLFileParser(new FileHandler($fileName));
+            $parser = new MySQLFileParser(new FileHandler($realPath));
 
             return $parser->parse('$$');
         } catch (FileException $e) {
