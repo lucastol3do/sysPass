@@ -29,6 +29,7 @@ namespace SP\Modules\Web\Controllers;
 use Exception;
 use SP\Core\Exceptions\SPException;
 use SP\Core\Language;
+use TypeError;
 use SP\Core\PhpExtensionChecker;
 use SP\Http\JsonResponse;
 use SP\Modules\Web\Controllers\Helpers\LayoutHelper;
@@ -96,6 +97,8 @@ final class InstallController extends ControllerBase
             $this->dic->get(Installer::class)->run($installData);
 
             return $this->returnJsonResponse(JsonResponse::JSON_SUCCESS, __u('Installation finished'));
+        } catch (\TypeError $e) {
+            return $this->returnJsonResponse(JsonResponse::JSON_ERROR, $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
         } catch (Exception $e) {
             processException($e);
 

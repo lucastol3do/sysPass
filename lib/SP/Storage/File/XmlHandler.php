@@ -254,7 +254,9 @@ final class XmlHandler implements XmlFileStorageInterface
 
             if (is_bool($value)) {
                 $items[$property->getName()] = (int)$value;
-            } elseif (is_numeric($value) && strpos($value, '.') === false) {
+            } elseif (is_int($value)) {
+                $items[$property->getName()] = $value;
+            } elseif (is_string($value) && is_numeric($value) && strpos($value, '.') === false) {
                 $items[$property->getName()] = (int)$value;
             } else {
                 $items[$property->getName()] = $value;
