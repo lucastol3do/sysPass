@@ -19,12 +19,12 @@ services:
     ports:
       - "8080:80"
     environment:
-      # Database connection (used by the web installer)
+      # Database connection (used by the web installer as defaults)
       SYSPASS_DB_HOST: db
       SYSPASS_DB_PORT: "3306"
       SYSPASS_DB_NAME: syspass
-      SYSPASS_DB_USER: syspass
-      SYSPASS_DB_PASS: "${SYSPASS_DB_PASS:-changeme}"
+      SYSPASS_DB_USER: root
+      SYSPASS_DB_PASS: "${MYSQL_ROOT_PASSWORD:-rootpass}"
       # Application settings
       SYSPASS_SITE_URL: "${SYSPASS_SITE_URL:-http://localhost:8080}"
       TZ: "${TZ:-UTC}"

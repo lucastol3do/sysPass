@@ -86,10 +86,10 @@ final class InstallController extends ControllerBase
         $installData->setAdminLogin($this->request->analyzeString('adminlogin', 'admin'));
         $installData->setAdminPass($this->request->analyzeEncrypted('adminpass'));
         $installData->setMasterPassword($this->request->analyzeEncrypted('masterpassword'));
-        $installData->setDbAdminUser($this->request->analyzeString('dbuser', 'root'));
+        $installData->setDbAdminUser($this->request->analyzeString('dbuser', getenv('SYSPASS_DB_USER') ?: 'root'));
         $installData->setDbAdminPass($this->request->analyzeEncrypted('dbpass'));
-        $installData->setDbName($this->request->analyzeString('dbname', 'syspass'));
-        $installData->setDbHost($this->request->analyzeString('dbhost', 'localhost'));
+        $installData->setDbName($this->request->analyzeString('dbname', getenv('SYSPASS_DB_NAME') ?: 'syspass'));
+        $installData->setDbHost($this->request->analyzeString('dbhost', getenv('SYSPASS_DB_HOST') ?: 'localhost'));
         $installData->setHostingMode($this->request->analyzeBool('hostingmode', false));
 
         try {

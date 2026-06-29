@@ -218,8 +218,8 @@ final class Installer extends Service
             $this->installData->setDbPort(3306);
         }
 
-        if (strpos('localhost', $this->installData->getDbHost()) === false
-            && strpos('127.0.0.1', $this->installData->getDbHost()) === false
+        if (strpos($this->installData->getDbHost(), 'localhost') === false
+            && strpos($this->installData->getDbHost(), '127.0.0.1') === false
         ) {
             if (APP_MODULE === 'tests') {
                 $address = SELF_IP_ADDRESS;
