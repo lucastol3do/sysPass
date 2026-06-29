@@ -22,8 +22,8 @@ const DB_PASS = process.env.MYSQL_ROOT_PASSWORD || 'rootpass';
 const DB_NAME = process.env.SYSPASS_DB_NAME || 'syspass';
 
 const ADMIN_LOGIN = process.env.SYSPASS_ADMIN_LOGIN || 'admin';
-const ADMIN_PASS = process.env.SYSPASS_ADMIN_PASS || 'Admin123!';
-const MASTER_PASS = process.env.SYSPASS_MASTER_PASS || 'Master123!';
+const ADMIN_PASS = process.env.SYSPASS_ADMIN_PASS || 'Admin12345!';
+const MASTER_PASS = process.env.SYSPASS_MASTER_PASS || 'Master12345!';
 
 /**
  * Helper: fill the installation form

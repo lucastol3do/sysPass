@@ -92,11 +92,6 @@ final class InstallController extends ControllerBase
         $installData->setDbHost($this->request->analyzeString('dbhost', getenv('SYSPASS_DB_HOST') ?: 'localhost'));
         $installData->setHostingMode($this->request->analyzeBool('hostingmode', false));
 
-        logger('Install debug - dbHost: ' . $installData->getDbHost()
-            . ' dbUser: ' . $installData->getDbAdminUser()
-            . ' dbPass length: ' . strlen($installData->getDbAdminPass())
-            . ' dbPass preview: ' . substr($installData->getDbAdminPass(), 0, 20), 'INFO');
-
         try {
             $this->dic->get(Installer::class)->run($installData);
 
