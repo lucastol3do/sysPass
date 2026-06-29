@@ -1,0 +1,88 @@
+# =============================================================================
+# sysPass - Docker Compose
+# =============================================================================
+# Usage:
+#   docker compose up -d
+#   Then visit http://localhost:8080 and follow the web installer.
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Application service
+  # ---------------------------------------------------------------------------
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: syspass-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      # Database connection (used by the web installer)
+      SYSPASS_DB_HOST: db
+      SYSPASS_DB_PORT: "3306"
+      SYSPASS_DB_NAME: syspass
+      SYSPASS_DB_USER: syspass
+      SYSPASS_DB_PASS: "${SYSPASS_DB_PASS:-changeme}"
+      # Application settings
+      SYSPASS_SITE_URL: "${SYSPASS_SITE_URL:-http://localhost:8080}"
+      TZ: "${TZ:-UTC}"
+    volumes:
+      # Persist config and cache across rebuilds
+      - app_config:/var/www/html/app/config
+      - app_cache:/var/www/html/app/cache
+      - app_backup:/var/www/html/app/backup
+      - app_temp:/var/www/html/app/temp
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - syspass-network
+
+  # ---------------------------------------------------------------------------
+  # Database service
+  # ---------------------------------------------------------------------------
+  db:
+    image: mariadb:10.11
+    container_name: syspass-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-rootpass}"
+      MYSQL_DATABASE: syspass
+      MYSQL_USER: syspass
+      MYSQL_PASSWORD: "${SYSPASS_DB_PASS:-changeme}"
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - syspass-network
+
+# ---------------------------------------------------------------------------
+# Volumes
+# ---------------------------------------------------------------------------
+volumes:
+  db_data:
+    driver: local
+  app_config:
+    driver: local
+  app_cache:
+    driver: local
+  app_backup:
+    driver: local
+  app_temp:
+    driver: local
+
+# ---------------------------------------------------------------------------
+# Networks
+# ---------------------------------------------------------------------------
+networks:
+  syspass-network:
+    driver: bridge

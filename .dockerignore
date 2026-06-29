@@ -1,0 +1,51 @@
+# =============================================================================
+# sysPass - .dockerignore
+# =============================================================================
+
+# Version control
+.git
+.gitignore
+.gitattributes
+.gitmodules
+
+# Dependencies (installed in build stage)
+vendor
+
+# Tests
+tests
+phpunit.xml*
+.phpunit*
+
+# IDEs and editors
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Node / frontend (if any)
+node_modules
+package.json
+package-lock.json
+yarn.lock
+webpack.*
+
+# Documentation (keep README.md)
+*.md
+!README.md
+
+# Docker files (don't copy compose files into image)
+docker-compose*.yml
+.dockerignore
+
+# Build artifacts
+build
+*.phar
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.*
