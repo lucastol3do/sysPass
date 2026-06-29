@@ -414,7 +414,7 @@ final class Bootstrap
 
         if (!self::$checkPhpVersion) {
             throw new InitializationException(
-                sprintf(__('Required PHP version >= %s <= %s'), '7.3', '7.4'),
+                sprintf(__('Required PHP version >= %s'), '8.1'),
                 Core\Exceptions\SPException::ERROR,
                 __u('Please update the PHP version to run sysPass')
             );
