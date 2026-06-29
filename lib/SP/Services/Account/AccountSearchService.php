@@ -413,7 +413,7 @@ final class AccountSearchService extends Service
 
         if ($cache === false
             || !isset($cache[$accountId])
-            || $cache[$accountId]->getTime() < (int)strtotime($accountSearchData->getDateEdit())
+            || $cache[$accountId]->getTime() < (int)strtotime($accountSearchData->getDateEdit() ?? '')
         ) {
             $cache[$accountId] = new AccountCache(
                 $accountId,

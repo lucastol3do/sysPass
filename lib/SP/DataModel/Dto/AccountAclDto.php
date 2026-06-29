@@ -79,7 +79,7 @@ final class AccountAclDto
         $dto->usersId = $accountDetailsResponse->getUsers();
         $dto->userGroupId = $accountDetailsResponse->getAccountVData()->getUserGroupId();
         $dto->userGroupsId = $accountDetailsResponse->getUserGroups();
-        $dto->dateEdit = strtotime($accountDetailsResponse->getAccountVData()->getDateEdit());
+        $dto->dateEdit = strtotime($accountDetailsResponse->getAccountVData()->getDateEdit() ?? '');
 
         return $dto;
     }
@@ -100,7 +100,7 @@ final class AccountAclDto
         $dto->usersId = $users;
         $dto->userGroupId = $accountHistoryData->getUserGroupId();
         $dto->userGroupsId = $userGroups;
-        $dto->dateEdit = strtotime($accountHistoryData->getDateEdit());
+        $dto->dateEdit = strtotime($accountHistoryData->getDateEdit() ?? '');
 
         return $dto;
     }
@@ -121,7 +121,7 @@ final class AccountAclDto
         $dto->usersId = $users;
         $dto->userGroupId = $accountSearchVData->getUserGroupId();
         $dto->userGroupsId = $userGroups;
-        $dto->dateEdit = strtotime($accountSearchVData->getDateEdit());
+        $dto->dateEdit = strtotime($accountSearchVData->getDateEdit() ?? '');
 
         return $dto;
     }

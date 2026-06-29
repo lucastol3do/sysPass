@@ -185,7 +185,7 @@ final class LoginService extends Service
         $this->loadUserPreferences();
 
         // Regenerate session ID after successful login to prevent session fixation
-        session_regenerate_id(true);
+        \SP\Core\Crypt\Session::reKey($this->context);
 
         $this->cleanUserData();
 
