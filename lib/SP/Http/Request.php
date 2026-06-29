@@ -141,7 +141,7 @@ final class Request
         $realPath = realpath($base . DIRECTORY_SEPARATOR . $path);
 
         if ($realPath === false
-            || strpos($realPath, $base) !== 0
+            || (strpos($realPath, $base) !== 0 && strpos($realPath, APP_ROOT) !== 0)
         ) {
             return '';
         }

@@ -1,1 +1,1 @@
-../material-blue/js/bootstrap-material-datetimepicker.js
+../../material-blue/js/bootstrap-material-datetimepicker.js

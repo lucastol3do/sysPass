@@ -95,7 +95,7 @@ final class Util
      */
     public static function convertShortUnit($value): int
     {
-        if (preg_match('/(\d+)(\w+)/', $value, $match)) {
+        if (preg_match('/(\d+)(\w+)/', (string)$value, $match)) {
             switch (strtoupper($match[2])) {
                 case 'K':
                     return (int)$match[1] * 1024;
@@ -155,7 +155,14 @@ final class Util
      */
     public static function unserialize($dstClass, $serialized, $srcClass = null)
     {
+        if ($serialized === null || $serialized === '') {
+            return $serialized;
+        }
+
         if (!is_object($serialized)) {
+            if (!is_string($serialized)) {
+                return $serialized;
+            }
             $match = preg_match_all('/O:\d+:"(?P<class>[^"]++)"/', $serialized, $matches);
 
             $process = false;
@@ -300,6 +307,6 @@ final class Util
      */
     public static function getMaxDownloadChunk(): int
     {
-        return self::convertShortUnit(ini_get('memory_limit')) / FileHandler::CHUNK_FACTOR;
+        return (int)(self::convertShortUnit(ini_get('memory_limit')) / FileHandler::CHUNK_FACTOR);
     }
 }

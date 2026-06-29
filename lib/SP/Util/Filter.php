@@ -54,7 +54,7 @@ final class Filter
      */
     public static function getEmail($value): string
     {
-        return filter_var(trim($value), FILTER_SANITIZE_EMAIL);
+        return filter_var(trim((string)$value), FILTER_SANITIZE_EMAIL);
     }
 
     /**
@@ -84,7 +84,7 @@ final class Filter
      */
     public static function getInt($value): int
     {
-        return (int)filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+        return (int)filter_var((string)$value, FILTER_SANITIZE_NUMBER_INT);
     }
 
     /**
@@ -100,7 +100,7 @@ final class Filter
      */
     public static function getString($value): string
     {
-        return htmlspecialchars(trim($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        return htmlspecialchars(trim((string)$value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
     /**
@@ -114,6 +114,6 @@ final class Filter
      */
     public static function getRaw($value): string
     {
-        return trim($value);
+        return trim((string)$value);
     }
 }

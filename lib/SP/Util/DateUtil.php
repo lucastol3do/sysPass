@@ -43,6 +43,6 @@ final class DateUtil
      */
     public static function getDateFromUnix($date, $format = 'Y-m-d H:i')
     {
-        return is_numeric($date) ? date($format, $date) : $date;
+        return is_numeric($date) ? date($format, (int)$date) : $date;
     }
 }

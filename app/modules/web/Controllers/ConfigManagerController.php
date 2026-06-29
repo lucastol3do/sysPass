@@ -298,10 +298,10 @@ final class ConfigManagerController extends ControllerBase
 
         $configService = $this->dic->get(ConfigService::class);
 
-        $template->assign('lastUpdateMPass', $configService->getByParam('lastupdatempass', 0));
+        $template->assign('lastUpdateMPass', (int)$configService->getByParam('lastupdatempass', 0));
 
-        $template->assign('tempMasterPassTime', $configService->getByParam(TemporaryMasterPassService::PARAM_TIME, 0));
-        $template->assign('tempMasterMaxTime', $configService->getByParam(TemporaryMasterPassService::PARAM_MAX_TIME, 0));
+        $template->assign('tempMasterPassTime', (int)$configService->getByParam(TemporaryMasterPassService::PARAM_TIME, 0));
+        $template->assign('tempMasterMaxTime', (int)$configService->getByParam(TemporaryMasterPassService::PARAM_MAX_TIME, 0));
 
         $tempMasterAttempts = sprintf('%d/%d',
             $configService->getByParam(TemporaryMasterPassService::PARAM_ATTEMPTS, 0),
@@ -396,7 +396,7 @@ final class ConfigManagerController extends ControllerBase
 
         $template->assign('dbInfo', $databaseUtil->getDBinfo());
         $template->assign('dbName', $this->configData->getDbName() . '@' . $this->configData->getDbHost());
-        $template->assign('configBackupDate', date('r', $this->dic->get(ConfigService::class)->getByParam('config_backup_date', 0)));
+        $template->assign('configBackupDate', date('r', (int)$this->dic->get(ConfigService::class)->getByParam('config_backup_date', 0)));
         $template->assign('plugins', $this->dic->get(PluginManager::class)->getLoadedPlugins());
         $template->assign('locale', Language::$localeStatus ?: sprintf('%s (%s)', $this->configData->getSiteLang(), __('Not installed')));
         $template->assign('securedSession', CryptSessionHandler::$isSecured);

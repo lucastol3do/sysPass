@@ -43,6 +43,7 @@ return [
         'mdl-jquery-modal-dialog.min.css',
         'selectize-custom.min.css',
         'toastr.min.css',
+        'styles.min.css',
         'material-dark.min.css'
     ]
 ];

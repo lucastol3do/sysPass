@@ -1,1 +1,1 @@
-../material-blue/js/mdl-jquery-modal-dialog.js
+../../material-blue/js/mdl-jquery-modal-dialog.js

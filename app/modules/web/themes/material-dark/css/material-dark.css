@@ -1057,6 +1057,11 @@ div.tag-list-box .tag-list-body .tags-list-items {
   color: var(--text-secondary) !important;
 }
 
+.mdl-list__item-sub-title,
+.mdl-list__item-text-body {
+  color: var(--text-secondary) !important;
+}
+
 /* ============================================
    MDL TABLE
    ============================================ */

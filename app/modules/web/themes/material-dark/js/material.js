@@ -1,1 +1,1 @@
-../material-blue/js/material.js
+../../material-blue/js/material.js
