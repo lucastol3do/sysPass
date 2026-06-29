@@ -41,6 +41,7 @@ use SP\Services\Account\AccountRequest;
 use SP\Services\Account\AccountSearchFilter;
 use SP\Services\Account\AccountService;
 use SP\Services\Api\ApiResponse;
+use SP\Services\CustomField\CustomFieldService;
 
 /**
  * Class AccountController
@@ -79,7 +80,22 @@ final class AccountController extends ControllerBase
                     ->addDetail('ID', $id))
             );
 
-            $this->returnResponse(ApiResponse::makeSuccess($accountDetails, $id));
+            $result = $accountDetails;
+
+            // Include custom fields when requested
+            $customFields = $this->apiService->getParamInt('customFields');
+            if ($customFields === 1) {
+                $customFieldService = $this->dic->get(CustomFieldService::class);
+                $result = [
+                    'account' => $accountDetails,
+                    'customFields' => $customFieldService->getForModuleAndItemId(
+                        ActionsInterface::ACCOUNT,
+                        $id
+                    ),
+                ];
+            }
+
+            $this->returnResponse(ApiResponse::makeSuccess($result, $id));
         } catch (Exception $e) {
             $this->returnResponseException($e);
 
@@ -324,6 +340,41 @@ final class AccountController extends ControllerBase
             );
 
             $this->returnResponse(ApiResponse::makeSuccess($accountDetails, $id, __('Account removed')));
+        } catch (Exception $e) {
+            processException($e);
+
+            $this->returnResponseException($e);
+        }
+    }
+
+    /**
+     * accountPermissionsAction
+     *
+     * Returns which users and groups have access to an account
+     */
+    public function accountPermissionsAction()
+    {
+        try {
+            $this->setupApi(ActionsInterface::ACCOUNT_VIEW);
+
+            $accountId = $this->apiService->getParamInt('accountId', true);
+
+            $accountDetails = $this->accountService->getById($accountId);
+
+            $this->eventDispatcher->notifyEvent('show.account',
+                new Event($this, EventMessage::factory()
+                    ->addDescription(__u('Account permissions displayed'))
+                    ->addDetail(__u('Name'), $accountDetails->getAccountVData()->getName())
+                    ->addDetail('ID', $accountId))
+            );
+
+            $this->returnResponse(ApiResponse::makeSuccess([
+                'accountId' => $accountId,
+                'users' => $accountDetails->getUsers(),
+                'userGroups' => $accountDetails->getUserGroups(),
+                'owner' => $accountDetails->getAccountVData()->getUserId(),
+                'ownerGroup' => $accountDetails->getAccountVData()->getUserGroupId(),
+            ], $accountId));
         } catch (Exception $e) {
             processException($e);
 

@@ -42,7 +42,8 @@ final class AccountHelp implements HelpInterface
     {
         return
             [
-                self::getItem('id', __('Account Id'), true)
+                self::getItem('id', __('Account Id'), true),
+                self::getItem('customFields', __('Include custom fields in the response (1 or 0)'))
             ];
     }
 
@@ -144,6 +145,17 @@ final class AccountHelp implements HelpInterface
         return
             [
                 self::getItem('id', __('Account Id'), true)
+            ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function accountPermissions()
+    {
+        return
+            [
+                self::getItem('accountId', __('Account Id'), true)
             ];
     }
 }

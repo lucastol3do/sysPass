@@ -61,6 +61,7 @@ use SP\Modules\Web\Forms\AccountForm;
 use SP\Mvc\Controller\CrudControllerInterface;
 use SP\Repositories\NoSuchItemException;
 use SP\Services\Account\AccountAclService;
+use SP\Services\Account\AccountFaviconService;
 use SP\Services\Account\AccountHistoryService;
 use SP\Services\Account\AccountService;
 use SP\Services\Auth\AuthException;
@@ -1111,6 +1112,59 @@ final class AccountController extends ControllerBase implements CrudControllerIn
 
             return $this->returnJsonResponseException($e);
         }
+    }
+
+    /**
+     * Serve the favicon for an account.
+     *
+     * @return string
+     */
+    public function faviconAction()
+    {
+        $accountId = $this->request->analyzeInt('accountId');
+
+        if ($accountId === 0) {
+            $this->router->response()->code(400);
+            $this->router->response()->body('Invalid account ID');
+            $this->router->response()->send();
+
+            return '';
+        }
+
+        try {
+            $faviconService = $this->dic->get(AccountFaviconService::class);
+            $faviconData = $faviconService->readFavicon($accountId);
+
+            if ($faviconData === null) {
+                // Try to fetch and store first
+                $faviconService->fetchAndStore($accountId);
+                $faviconData = $faviconService->readFavicon($accountId);
+            }
+
+            if ($faviconData !== null) {
+                $mimeType = $faviconService->getFaviconMimeType($accountId);
+
+                $response = $this->router->response();
+                $response->header('Content-Type', $mimeType);
+                $response->header('Content-Length', (string)strlen($faviconData));
+                $response->header('Cache-Control', 'public, max-age=86400');
+                $response->body($faviconData);
+                $response->send();
+
+                return '';
+            }
+        } catch (Exception $e) {
+            processException($e);
+        }
+
+        // Return a 1x1 transparent pixel as fallback
+        $this->router->response()->header('Content-Type', 'image/png');
+        $this->router->response()->body(base64_decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+        ));
+        $this->router->response()->send();
+
+        return '';
     }
 
     /**
