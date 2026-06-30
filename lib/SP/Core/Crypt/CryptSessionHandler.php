@@ -63,13 +63,14 @@ final class CryptSessionHandler extends SessionHandler
      *
      * @param string $id The session id to read data for.
      *
-     * @return string <p>
+     * @return string|false <p>
      *                           Returns an encoded string of the read data.
      *                           If nothing was read, it must return an empty string.
      *                           Note this value is returned internally to PHP for processing.
      *                           </p>
      * @since 5.4.0
      */
+    #[\ReturnTypeWillChange]
     public function read($id)
     {
         $data = parent::read($id);
@@ -112,6 +113,7 @@ final class CryptSessionHandler extends SessionHandler
      *                             </p>
      * @since 5.4.0
      */
+    #[\ReturnTypeWillChange]
     public function write($id, $data)
     {
         try {
