@@ -20,7 +20,12 @@ jobs:
           extensions: pdo, pdo_mysql, dom, gd, json, gettext, fileinfo, zlib, libxml, mbstring, curl, openssl, phar
           coverage: none
       - name: PHP Syntax Check
-        run: find lib/ app/ -name '*.php' -exec php -l {} \; 2>&1 | grep -v "No syntax errors detected" || exit 1
+        run: |
+          errors=$(find lib/ app/ -name '*.php' -exec php -l {} \; 2>&1 | grep -v "No syntax errors detected")
+          if [ -n "$errors" ]; then
+            echo "$errors"
+            exit 1
+          fi
 
   composer-validate:
     runs-on: ubuntu-latest
