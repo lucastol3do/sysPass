@@ -3,7 +3,7 @@
   "description": "PHP web based Password Manager for business and personal use.",
   "homepage": "https://syspass.org",
   "minimum-stability": "stable",
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "authors": [
     {
       "name": "Rubén Domínguez",
