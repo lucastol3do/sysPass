@@ -21,7 +21,7 @@ jobs:
           coverage: none
       - name: PHP Syntax Check
         run: |
-          errors=$(find lib/ app/ -name '*.php' -exec php -l {} \; 2>&1 | grep -v "No syntax errors detected")
+          errors=$(find lib/ app/ -name '*.php' -exec php -l {} \; 2>&1 | grep -v "No syntax errors detected" || true)
           if [ -n "$errors" ]; then
             echo "$errors"
             exit 1
