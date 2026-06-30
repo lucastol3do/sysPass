@@ -1207,3 +1207,60 @@ div.tag-list-box .tag-list-body .tags-list-items {
     background-color: var(--bg-secondary) !important;
   }
 }
+
+/* ============================================
+   LOGIN PAGE — COMPREHENSIVE DARK OVERRIDES
+   ============================================ */
+
+/* Override base _login.scss background */
+body.login,
+body.logout,
+body.userpassreset {
+  background: var(--bg-primary) !important;
+}
+
+body.login #wrap,
+body.logout #wrap,
+body.userpassreset #wrap {
+  background: transparent !important;
+}
+
+body.login #container,
+body.logout #container,
+body.userpassreset #container {
+  padding-top: 5% !important;
+}
+
+/* Login form card */
+#box-pub-noheader {
+  background: transparent url("public/images/logo_full_nobg_outline_color.png") no-repeat top center !important;
+  background-size: 75% auto !important;
+}
+
+#box-pub-noheader .box-header {
+  color: var(--text-primary) !important;
+}
+
+#box-pub-noheader .box-form form fieldset#box-data legend {
+  color: var(--text-primary) !important;
+}
+
+#box-pub-noheader .box-form form fieldset#box-data .form-control > i {
+  color: var(--text-secondary) !important;
+}
+
+/* Login button — ensure accent color without indigo override */
+#box-pub-noheader .box-form div#box-buttons .mdl-button--fab.mdl-button--colored {
+  background-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+/* Login "Forgot password?" link */
+#box-pub-noheader #box-login #box-actions a {
+  color: var(--accent) !important;
+}
+
+/* Demo info text */
+#box-pub-noheader #demo-info span {
+  color: var(--text-primary) !important;
+}
