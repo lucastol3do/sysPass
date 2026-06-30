@@ -25,6 +25,35 @@ const ADMIN_LOGIN = process.env.SYSPASS_ADMIN_LOGIN || 'admin';
 const ADMIN_PASS = process.env.SYSPASS_ADMIN_PASS || 'Admin12345!';
 const MASTER_PASS = process.env.SYSPASS_MASTER_PASS || 'Master12345!';
 
+/**
+ * Fill a password field and trigger JSEncrypt RSA encryption.
+ *
+ * sysPass encrypts password fields on the 'blur' event via encryptFormValue().
+ * Playwright's fill() does NOT trigger blur, so we must manually trigger it
+ * and verify that encryption occurred (value changes to a base64 RSA ciphertext).
+ */
+async function fillAndEncrypt(page, selector, value) {
+  const locator = page.locator(selector);
+  await locator.fill(value);
+  // Trigger blur to invoke encryptFormValue()
+  await locator.dispatchEvent('blur');
+  // Wait briefly for JSEncrypt async encryption to complete
+  await page.waitForTimeout(200);
+  // Verify the value was encrypted — it should now be a long base64 string
+  // (RSA-2048 ciphertext is ~344 chars of base64), not the original plaintext
+  const encrypted = await locator.inputValue();
+  if (encrypted === value) {
+    // Encryption didn't fire — try calling encryptFormValue directly
+    await page.evaluate(({ sel }) => {
+      const $input = $(sel);
+      if (typeof sysPass !== 'undefined' && sysPass.encryptFormValue) {
+        sysPass.encryptFormValue($input);
+      }
+    }, { sel: selector });
+    await page.waitForTimeout(200);
+  }
+}
+
 test.describe('sysPass E2E Test Suite', () => {
   test.beforeAll(async () => {
     // Reset Docker environment for a clean install, ensuring we rebuild with latest host code
@@ -98,17 +127,17 @@ test.describe('sysPass E2E Test Suite', () => {
     await page.locator('#adminlogin').clear();
     await page.locator('#adminlogin').fill(ADMIN_LOGIN);
 
-    // Password fields have obfuscated IDs — use name selector
-    await page.locator('input[name="adminpass"]').fill(ADMIN_PASS);
-    await page.locator('input[name="masterpassword"]').fill(MASTER_PASS);
-    await page.locator('#masterpasswordR').fill(MASTER_PASS);
+    // Password fields — must trigger RSA encryption via blur event
+    await fillAndEncrypt(page, 'input[name="adminpass"]', ADMIN_PASS);
+    await fillAndEncrypt(page, 'input[name="masterpassword"]', MASTER_PASS);
+    await fillAndEncrypt(page, '#masterpasswordR', MASTER_PASS);
 
     // Database credentials
     await page.locator('#dbhost').clear();
     await page.locator('#dbhost').fill(DB_HOST);
     await page.locator('#dbuser').clear();
     await page.locator('#dbuser').fill(DB_USER);
-    await page.locator('input[name="dbpass"]').fill(DB_PASS);
+    await fillAndEncrypt(page, 'input[name="dbpass"]', DB_PASS);
     await page.locator('#dbname').clear();
     await page.locator('#dbname').fill(DB_NAME);
 
@@ -157,7 +186,7 @@ test.describe('sysPass E2E Test Suite', () => {
     await expect(page).toHaveURL(/login/);
 
     await page.locator('#user').fill(ADMIN_LOGIN);
-    await page.locator('input[name="pass"]').fill(ADMIN_PASS);
+    await fillAndEncrypt(page, 'input[name="pass"]', ADMIN_PASS);
 
     const [response] = await Promise.all([
       page.waitForURL(url => url.searchParams.get('r') === 'index', { timeout: 15000 }).catch(() => null),
@@ -181,7 +210,7 @@ test.describe('sysPass E2E Test Suite', () => {
     // 1. Log in
     await page.goto(`${BASE_URL}/index.php?r=login/index`, { waitUntil: 'networkidle' });
     await page.locator('#user').fill(ADMIN_LOGIN);
-    await page.locator('input[name="pass"]').fill(ADMIN_PASS);
+    await fillAndEncrypt(page, 'input[name="pass"]', ADMIN_PASS);
 
     await Promise.all([
       page.waitForURL(url => url.searchParams.get('r') === 'index', { timeout: 15000 }),
@@ -248,8 +277,8 @@ test.describe('sysPass E2E Test Suite', () => {
     await page.locator('#frmAccount #name').fill(accountName);
     await page.locator('#frmAccount #url').fill('http://example.com');
     await page.locator('#frmAccount #login').fill(accountUser);
-    await page.locator('#frmAccount input[name="password"]').fill(accountPass);
-    await page.locator('#frmAccount input[name="password_repeat"]').fill(accountPass);
+    await fillAndEncrypt(page, '#frmAccount input[name="password"]', accountPass);
+    await fillAndEncrypt(page, '#frmAccount input[name="password_repeat"]', accountPass);
 
     await page.evaluate(({ catName, cliName }) => {
       const catSelect = document.querySelector('#category_id');
