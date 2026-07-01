@@ -2,7 +2,7 @@
 
 > **Note:** This project is a modernization fork of the original repository. [nuxsmin/sysPass](https://github.com/nuxsmin/sysPass).
 
-[![Build Status](https://github.com/lucastol3do/sysPass/actions/workflows/ci.yml/badge.svg)](https://github.com/lucastol3do/sysPass/actions/workflows/ci.yml)  [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nuxsmin/sysPass/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nuxsmin/sysPass/?branch=master) [![Backers on Open Collective](https://opencollective.com/sysPass/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/sysPass/sponsors/badge.svg)](#sponsors)
+[![Build Status](https://github.com/lucastol3do/sysPass/actions/workflows/ci.yml/badge.svg)](https://github.com/lucastol3do/sysPass/actions/workflows/ci.yml)  
 
 ---
 
